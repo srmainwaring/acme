@@ -12,7 +12,7 @@ if (NOT json_POPULATED)
     FetchContent_Populate(json)
 
     # json BUILD OPTIONS
-    set(JSON_BuildTests ON CACHE BOOL "")# CACHE BOOL "Build json tests")
+    set(JSON_BuildTests OFF CACHE BOOL "")# CACHE BOOL "Build json tests")
     set(JSON_Install ON CACHE BOOL "")
 
     add_subdirectory(${json_SOURCE_DIR} ${json_BINARY_DIR})
