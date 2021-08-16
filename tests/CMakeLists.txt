@@ -1,17 +1,12 @@
-add_executable(test_FPP1Q test_FPP1Q.cpp)
+message(STATUS "    ...tests")
 
-target_link_libraries(test_FPP1Q acme)
+message(STATUS "Test programs for ACME framework...")
 
-set_target_properties(test_FPP1Q PROPERTIES
-        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+if (${ACME_BUILD_DEV_TESTS})
+    add_subdirectory(dev_tests)
+endif ()
 
-
-
-add_executable(test_propeller_rudder test_propeller_rudder.cpp)
-
-target_link_libraries(test_propeller_rudder acme)
-
-set_target_properties(test_propeller_rudder PROPERTIES
-        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
-
+if (${ACME_BUILD_UNIT_TESTS})
+    add_subdirectory(unit_tests)
+endif ()
 

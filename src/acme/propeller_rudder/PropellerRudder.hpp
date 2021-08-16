@@ -60,9 +60,10 @@ namespace acme {
 
     // TODO: ici, pour calculer vRA, on peut appliquer la correction kappa
     double vRA = v_R0;
-    if (rudder_params.m_use_transverse_velocity_correction) {
-
-    }
+    //FIXME
+//    if (rudder_params.m_use_transverse_velocity_correction) {
+//
+//    }
 
     double rudder_angle_rad = rudder_angle_deg * MU_PI_180;
 

@@ -23,6 +23,8 @@ cmake_policy(SET CMP0077 NEW)
 option(BUILD_SHARED_LIBS "Shared lib version" OFF)
 
 option(ACME_BUILD_TESTS "Activate build tests" ON)
+option(ACME_BUILD_DEV_TESTS "Activate build tests" ON)
+option(ACME_BUILD_UNIT_TESTS "Activate build tests" ON)
 
 #=============================================================================
 # Retrieving the current Git revision

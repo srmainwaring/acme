@@ -30,7 +30,17 @@ namespace acme {
    private:
     mathutils::LookupTable2d<double> m_cl_cd_cn_coeffs;
 
+    double m_max_flap_angle_rad;
+    double m_min_flap_angle_rad;
+
   };
+
+  void ParseFlapRudderJsonString(const std::string &json_string,
+                             std::vector<double> &attack_angle_rad,
+                             std::vector<double> &flap_angle_rad,
+                             std::vector<double> &cd,
+                             std::vector<double> &cl,
+                             std::vector<double> &cn);
 
 }  // end namespace acme
 

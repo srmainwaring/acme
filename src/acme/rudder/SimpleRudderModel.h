@@ -23,8 +23,6 @@ namespace acme {
     // Optional
 //    bool m_has_hull_influence_transverse_velocity = false;
     double m_flap_slope = 0.; // only used for a flap rudder type
-
-    bool m_use_transverse_velocity_correction = false;
   };
 
 
@@ -69,10 +67,11 @@ namespace acme {
 
     RudderModelType m_type;
 
-   private:
-    mathutils::LookupTable1D<double, double> m_cl_cd_cn_coeffs;
     double m_max_alpha_R_rad;
     double m_min_alpha_R_rad;
+
+   private:
+    mathutils::LookupTable1D<double, double> m_cl_cd_cn_coeffs;
 
     mutable double c_alpha_R_rad;
     mutable double c_lift_N;

@@ -118,7 +118,7 @@ namespace acme {
     m_cl_cd_cn_coeffs.AddY("cd", cd);
     m_cl_cd_cn_coeffs.AddY("cl", cl);
     m_cl_cd_cn_coeffs.AddY("cn", cn);
-
+//    m_cl_cd_cn_coeffs.PermissiveOFF();
     m_min_alpha_R_rad = *std::min_element(attack_angle_rad.begin(), attack_angle_rad.end());
     m_max_alpha_R_rad = *std::max_element(attack_angle_rad.begin(), attack_angle_rad.end());
 
@@ -152,6 +152,8 @@ namespace acme {
       dc = node["direction_convention"].get<json::string_t>();
       if (dc != "GOTO" and dc != "COMEFROM")
         throw std::runtime_error("SimpleRudderModel parser : frame convention should be : GOTO or COMEFROM");
+      if (dc == "GOTO") // FIXME
+        std::cout<<"GOTO not supported yet in rudder parsing !!!";
     } catch (json::parse_error &err) {
       std::cerr << "SimpleRudderModel parser : no direction_convention in load_coefficients";
       exit(EXIT_FAILURE);
@@ -168,11 +170,12 @@ namespace acme {
       for (auto &angle:attack_angle_rad) {
         angle *= DEG2RAD;
       }
-      if (dc == "GOTO")
-        for (auto &angle:attack_angle_rad) {
-          angle =+ MU_PI;
-          angle = mathutils::Normalize__PI_PI(angle);
-        }
+      //FIXME : change from GOTO to COMEFROM
+//      if (dc == "GOTO")
+//        for (auto &angle:attack_angle_rad) {
+//          angle =+ MU_PI;
+//          angle = mathutils::Normalize__PI_PI(angle);
+//        }
     } catch (json::parse_error &err) {
       std::cerr << "SimpleRudderModel parser : no flow_incidence_on_main_rudder_deg in load_coefficients";
       exit(EXIT_FAILURE);
@@ -220,8 +223,6 @@ namespace acme {
       std::cerr<<d.what();
       exit(EXIT_FAILURE);
     }
-
-
 
 
   }
