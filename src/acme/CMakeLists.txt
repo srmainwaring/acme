@@ -15,3 +15,5 @@ add_subdirectory(rudder)
 add_subdirectory(tunnel)
 add_subdirectory(propeller_rudder)
 add_subdirectory(sail)
+
+set_target_properties(acme PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
