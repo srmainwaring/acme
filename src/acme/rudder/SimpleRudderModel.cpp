@@ -57,11 +57,11 @@ namespace acme {
 //    }
 
     // Drift angle
-    double beta_R = std::atan2(vRA, uRA);
+    c_beta_R_rad = std::atan2(vRA, uRA);
 
     // Attack angle
     double rudder_angle_rad = rudder_angle_deg * MU_PI_180;
-    c_alpha_R_rad = rudder_angle_rad - beta_R;
+    c_alpha_R_rad = rudder_angle_rad - c_beta_R_rad;
     c_alpha_R_rad = mathutils::Normalize__PI_PI(c_alpha_R_rad);
 
     // Get coefficients
@@ -77,8 +77,8 @@ namespace acme {
                   m_params.m_chord_m; // FIXME: la prise en compte du signe de alpha se fait comment ? dans les tables ?
 
     // Forces in body frame
-    double Cbeta = std::cos(beta_R);
-    double Sbeta = std::sin(beta_R);
+    double Cbeta = std::cos(c_beta_R_rad);
+    double Sbeta = std::sin(c_beta_R_rad);
 
     c_fx_N = Cbeta * c_drag_N - Sbeta * c_lift_N;
     c_fy_N = Sbeta * c_drag_N + Cbeta * c_lift_N;

@@ -8,6 +8,7 @@
 #include <string>
 
 #include "MathUtils/LookupTable1D.h"
+#include "MathUtils/Angles.h"
 
 #include "RudderModelType.h"
 
@@ -48,6 +49,20 @@ namespace acme {
 
     double GetMz() const { return c_torque_Nm; }
 
+    double GetDrag() const { return c_drag_N; }
+
+    double GetLift() const { return c_lift_N; }
+
+    double GetTorque() const { return c_torque_Nm; }
+
+    double GetDriftAngle(mathutils::ANGLE_UNIT unit) const {
+      return unit == mathutils::DEG ? c_beta_R_rad * RAD2DEG : c_beta_R_rad;
+    }
+
+    double GetAttackAngle(mathutils::ANGLE_UNIT unit) const {
+      return unit == mathutils::DEG ? c_alpha_R_rad * RAD2DEG : c_alpha_R_rad;
+    }
+
     virtual void GetClCdCn(const double &attack_angle_rad,
                            const double &rudder_angle_rad,
                            double &cl,
@@ -73,6 +88,7 @@ namespace acme {
    private:
     mathutils::LookupTable1D<double, double> m_cl_cd_cn_coeffs;
 
+    mutable double c_beta_R_rad;
     mutable double c_alpha_R_rad;
     mutable double c_lift_N;
     mutable double c_drag_N;
