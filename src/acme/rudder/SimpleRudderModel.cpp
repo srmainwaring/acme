@@ -42,19 +42,25 @@ namespace acme {
       exit(EXIT_FAILURE);
     }
 
-    double sidewash_angle_0 = std::atan2(v_NWU, u_NWU); // ou drift_angle_0 pour calculer le wake fraction
-
-    // Estimated wake fraction
-    double wr = m_params.m_hull_wake_fraction_0 * std::exp(-4. * sidewash_angle_0 * sidewash_angle_0);
-
-    double uRA = u_NWU * (1 - wr);
+    double uRA = u_NWU;
     double vRA = v_NWU;
 
-//    if (m_params.m_has_hull_influence_transverse_velocity) {
-//
-//      double kappa = 1.; // TODO: implementer le calcul
-//      vRA *= kappa;
-//    }
+    if (m_params.m_has_hull_influence) {
+
+      double sidewash_angle_0 = std::atan2(v_NWU, u_NWU); // ou drift_angle_0 pour calculer le wake fraction
+
+      // Estimated wake fraction
+      double wr = m_params.m_hull_wake_fraction_0 * std::exp(-4. * sidewash_angle_0 * sidewash_angle_0);
+
+      uRA *= (1. - wr);
+
+      if (m_params.m_has_hull_influence_transverse_velocity) {
+
+        double kappa = 1.; // TODO: implementer le calcul
+        vRA *= kappa;
+      }
+
+    }
 
     // Drift angle
     c_beta_R_rad = std::atan2(vRA, uRA);

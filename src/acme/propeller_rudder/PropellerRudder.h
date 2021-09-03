@@ -42,6 +42,26 @@ namespace acme {
                          const double &pitch_ratio,
                          const double &rudder_angle_deg) const = 0;
 
+    virtual double GetpropellerThrust() const = 0;
+
+    virtual double GetPropellerTorque() const = 0;
+
+    virtual double GetPropellerEfficiency() const = 0;
+
+    virtual double GetPropellerPower() const = 0;
+
+    virtual double GetRudderLift() const = 0;
+
+    virtual double GetRudderDrag() const = 0;
+
+    virtual double GetRudderMz() const = 0;
+
+    virtual double GetPropellerRudderFx() const = 0;
+
+    virtual double GetPropellerRudderFy() const = 0;
+
+    virtual double GetPropellerRudderMz() const = 0;
+
   };
 
   template<class Propeller, class Rudder>
@@ -65,25 +85,25 @@ namespace acme {
                  const double &pitch_ratio,
                  const double &rudder_angle_deg) const override;
 
-    double GetpropellerThrust() const;
+    double GetpropellerThrust() const override;
 
-    double GetPropellerTorque() const;
+    double GetPropellerTorque() const override;
 
-    double GetPropellerEfficiency() const;
+    double GetPropellerEfficiency() const override;
 
-    double GetPropellerPower() const;
+    double GetPropellerPower() const override;
 
-    double GetRudderLift() const;
+    double GetRudderLift() const override;
 
-    double GetRudderDrag() const;
+    double GetRudderDrag() const override;
 
-    double GetRudderMz() const;
+    double GetRudderMz() const override;
 
-    double GetPropellerRudderFx() const;
+    double GetPropellerRudderFx() const override;
 
-    double GetPropellerRudderFy() const;
+    double GetPropellerRudderFy() const override;
 
-    double GetPropellerRudderMz() const;
+    double GetPropellerRudderMz() const override;
 
    private:
     std::unique_ptr<Propeller> m_propeller;
