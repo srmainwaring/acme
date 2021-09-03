@@ -85,25 +85,25 @@ namespace acme {
                  const double &pitch_ratio,
                  const double &rudder_angle_deg) const override;
 
-    double GetpropellerThrust() const override;
+    double GetpropellerThrust() const override {};
 
-    double GetPropellerTorque() const override;
+    double GetPropellerTorque() const override {};
 
-    double GetPropellerEfficiency() const override;
+    double GetPropellerEfficiency() const override {};
 
-    double GetPropellerPower() const override;
+    double GetPropellerPower() const override {};
 
-    double GetRudderLift() const override;
+    double GetRudderLift() const override {};
 
-    double GetRudderDrag() const override;
+    double GetRudderDrag() const override {};
 
-    double GetRudderMz() const override;
+    double GetRudderMz() const override {};
 
-    double GetPropellerRudderFx() const override;
+    double GetPropellerRudderFx() const override {};
 
-    double GetPropellerRudderFy() const override;
+    double GetPropellerRudderFy() const override {};
 
-    double GetPropellerRudderMz() const override;
+    double GetPropellerRudderMz() const override {};
 
    private:
     std::unique_ptr<Propeller> m_propeller;
