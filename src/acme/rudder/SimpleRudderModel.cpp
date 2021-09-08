@@ -139,16 +139,16 @@ namespace acme {
     m_is_logged = is_logged;
   }
 
-  void SimpleRudderModel::Finalize() {
+  void SimpleRudderModel::Finalize(double time) {
     if (m_is_logged) {
       auto log_file = "rudder_log.csv";
       std::ofstream myfile;
       myfile.open(log_file, std::ios::app);
       if (!myfile.tellp()) {
-        myfile << "u_NWU;v_NWU;uRA;vRA;rudder_angle;alpha_R_rad;beta_R_rad;drag_N;lift_N;torque_Nm;fx_N;fy_N;" << std::endl;
-        myfile << "m/s;m/s;m/s;m/s;rad;rad;rad;N;N;N.m;N;N;" << std::endl;
+        myfile << "time;u_NWU;v_NWU;uRA;vRA;rudder_angle;alpha_R_rad;beta_R_rad;drag_N;lift_N;torque_Nm;fx_N;fy_N;" << std::endl;
+        myfile << "s;m/s;m/s;m/s;m/s;rad;rad;rad;N;N;N.m;N;N;" << std::endl;
       }
-      myfile << c_u_NWU << ';' << c_v_NWU << ';' << c_uRA << ';' << c_vRA << ';'
+      myfile << time << ';' << c_u_NWU << ';' << c_v_NWU << ';' << c_uRA << ';' << c_vRA << ';'
              << c_rudder_angle_rad << ';' << c_alpha_R_rad << ';' << c_beta_R_rad << ';'
              << c_drag_N << ';' << c_lift_N << ';' << c_torque_Nm << ';' << c_fx_N << ';'
              << c_fy_N << ';' << std::endl;

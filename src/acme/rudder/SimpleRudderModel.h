@@ -35,7 +35,7 @@ namespace acme {
 
     virtual void Initialize();
 
-    void Finalize();
+    void Finalize(double time);
 
     void Log(bool is_logged);
 
