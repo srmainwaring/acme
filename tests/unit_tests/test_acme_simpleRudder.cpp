@@ -141,6 +141,8 @@ TEST(TestRudder, forces) {
   params.m_chord_m = 2.;
   params.m_lateral_area_m2 = 4.;
   params.m_flap_slope = 0.; //NA
+  params.m_has_hull_influence = true;
+  params.m_has_hull_influence_transverse_velocity = false;
 
   auto acme_rudder3 = SimpleRudderModel(params, ss.str());
   acme_rudder3.Initialize();

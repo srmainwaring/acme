@@ -35,6 +35,10 @@ namespace acme {
 
     virtual void Initialize();
 
+    void Finalize();
+
+    void Log(bool is_logged);
+
     virtual void Compute(const double &water_density,
                          const double &u_NWU,
                          const double &v_NWU,
@@ -89,6 +93,9 @@ namespace acme {
    private:
     mathutils::LookupTable1D<double, double> m_cl_cd_cn_coeffs;
 
+    bool m_is_logged;
+
+    mutable double c_rudder_angle_rad;
     mutable double c_beta_R_rad;
     mutable double c_alpha_R_rad;
     mutable double c_lift_N;
@@ -96,6 +103,10 @@ namespace acme {
     mutable double c_torque_Nm;
     mutable double c_fx_N;
     mutable double c_fy_N;
+    mutable double c_u_NWU;
+    mutable double c_v_NWU;
+    mutable double c_uRA;
+    mutable double c_vRA;
 
   };
 
