@@ -34,7 +34,7 @@ namespace acme {
   void FlapRudderModel::ParseRudderPerformanceCurveJsonString() {
     std::string json_string;
     std::vector<double> attack_angle_rad, flap_angle_rad, cd, cl, cn;
-    ParseFlapRudderJsonString(json_string, attack_angle_rad, flap_angle_rad, cd, cl, cn);
+    ParseFlapRudderJsonString(m_temp_perf_data_json_string, attack_angle_rad, flap_angle_rad, cd, cl, cn);
     m_cl_cd_cn_coeffs.SetX(attack_angle_rad);
     m_cl_cd_cn_coeffs.SetY(flap_angle_rad);
     m_cl_cd_cn_coeffs.AddData("cd", cd);
@@ -76,10 +76,10 @@ namespace acme {
     } catch (json::parse_error &err) {
       std::cerr << "SimpleRudderModel parser : no flow_incidence_on_main_rudder_deg in load_coefficients";
       exit(EXIT_FAILURE);
-    } catch (const std::exception&d) {
-    std::cerr<<d.what();
-    exit(EXIT_FAILURE);
-  }
+    } catch (const std::exception &d) {
+      std::cerr << d.what();
+      exit(EXIT_FAILURE);
+    }
 
     try {
       Cd = j["Cd"].get<std::vector<std::vector<double>>>();
@@ -87,13 +87,13 @@ namespace acme {
       for (int i = 0; i < flap_angle_rad.size(); i++)
         mat.row(i) = Eigen::VectorXd::Map(&Cd[i][0], Cd[i].size());
       cd = {mat.data(), mat.data() + mat.rows() * mat.cols()};
-      if (cd.size()!=n)
+      if (cd.size() != n)
         throw std::runtime_error("SimpleRudderModel parser : Cd not covering all angles range");
     } catch (json::parse_error &err) {
       std::cerr << "SimpleRudderModel parser : no Cd in load_coefficients";
       exit(EXIT_FAILURE);
-    } catch (const std::exception&d) {
-      std::cerr<<d.what();
+    } catch (const std::exception &d) {
+      std::cerr << d.what();
       exit(EXIT_FAILURE);
     }
 
@@ -103,13 +103,13 @@ namespace acme {
       for (int i = 0; i < flap_angle_rad.size(); i++)
         mat.row(i) = Eigen::VectorXd::Map(&Cl[i][0], Cl[i].size());
       cl = {mat.data(), mat.data() + mat.rows() * mat.cols()};
-      if (cl.size()!=n)
+      if (cl.size() != n)
         throw std::runtime_error("SimpleRudderModel parser : Cl not covering all angles range");
     } catch (json::parse_error &err) {
       std::cerr << "SimpleRudderModel parser : no Cl in load_coefficients";
       exit(EXIT_FAILURE);
-    } catch (const std::exception&d) {
-      std::cerr<<d.what();
+    } catch (const std::exception &d) {
+      std::cerr << d.what();
       exit(EXIT_FAILURE);
     }
 
@@ -119,13 +119,13 @@ namespace acme {
       for (int i = 0; i < flap_angle_rad.size(); i++)
         mat.row(i) = Eigen::VectorXd::Map(&Cn[i][0], Cn[i].size());
       cn = {mat.data(), mat.data() + mat.rows() * mat.cols()};
-      if (cn.size()!=n)
+      if (cn.size() != n)
         throw std::runtime_error("SimpleRudderModel parser : Cn not covering all angles range");
     } catch (json::parse_error &err) {
       std::cerr << "SimpleRudderModel parser : no Cn in load_coefficients";
       exit(EXIT_FAILURE);
-    } catch (const std::exception&d) {
-      std::cerr<<d.what();
+    } catch (const std::exception &d) {
+      std::cerr << d.what();
       exit(EXIT_FAILURE);
     }
 

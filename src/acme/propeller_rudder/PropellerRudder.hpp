@@ -33,6 +33,8 @@ namespace acme {
 
     /**
      * Solving for propeller action directly using propeller classes implementation
+     * ref : Manoeuvring Technical Manual, Brix, Soder, 1992, p84
+     * https://drive.google.com/file/d/195jz2YHRuhX3tSrqEPNJkYZg_7ZVTcHn/view?usp=sharing
      */
     m_propeller->Compute(water_density,
                          u_NWU_propeller,
@@ -56,20 +58,20 @@ namespace acme {
     // Estimated wake fraction for the rudder
     double wR = wr0 * std::exp(-4. * rudder_sidewash_angle_0 * rudder_sidewash_angle_0);
 
-    double uRA = u_R0 * (1 - wR);
+    c_uRA = u_R0 * (1 - wR);
 
     // TODO: ici, pour calculer vRA, on peut appliquer la correction kappa
-    double vRA = v_R0;
+    c_vRA = v_R0;
     //FIXME
 //    if (rudder_params.m_use_transverse_velocity_correction) {
 //
 //    }
 
-    double rudder_angle_rad = rudder_angle_deg * MU_PI_180;
+    c_rudder_angle_rad = rudder_angle_deg * MU_PI_180;
 
     // Mean axial speed of inflow to the propeller (with wake fraction correction included)
-    double uPA = m_propeller->GetAdvanceVelocity();
-    double vPA = v_NWU_propeller;
+    c_uPA = m_propeller->GetAdvanceVelocity();
+    c_vPA = v_NWU_propeller;
 
     // Propeller data
     double r0 = propeller_params.m_diameter_m;  // Propeller radius
@@ -78,23 +80,23 @@ namespace acme {
     // Rudder data
     double A_R = rudder_params.m_lateral_area_m2;// Rudder total area
     double c = rudder_params.m_chord_m;// Rudder chord length at its half height
-    double hR = rudder_params.m_height_m;// Rudder height
+    double h_R = rudder_params.m_height_m;// Rudder height
 
     /**
      * Dealing with rudder forces INSIDE the slipstream of the propeller (RP)
      */
 
     // Stagnation pressure at propeller position
-    double q_PA = 0.5 * water_density * (uPA * uPA + vPA * vPA);
+    double q_PA = 0.5 * water_density * (c_uPA * c_uPA + c_vPA * c_vPA);
 
     // Thrust loading coefficient
     double Cth = std::abs(m_propeller->GetThrust() / (q_PA * Ap));
 
     // Mean axial speed of the slipstream far behind the propeller
-    double u_inf = uPA * std::sqrt(1. + Cth);
+    double u_inf = c_uPA * std::sqrt(1. + Cth);
 
     // Slipstream radius far behind the propeller (potential)
-    double r_inf = r0 * std::sqrt(0.5 * (1. + uPA / u_inf));
+    double r_inf = r0 * std::sqrt(0.5 * (1. + c_uPA / u_inf));
 
     // Slipstream radius at rudder position (potential)
     double rinf_r0 = r_inf / r0;
@@ -108,52 +110,52 @@ namespace acme {
     double ux = u_inf * rinf_rx * rinf_rx;
 
     // Turbulent mixing correction on radius
-    double drx = 0.15 * xr * (ux - uPA) / (ux + uPA);
+    double drx = 0.15 * xr * (ux - c_uPA) / (ux + c_uPA);
 
     // Corrected radius and axial velocities
-    double rRP = rx + drx; // corrected radius
-    double r_rdr = rx / (rRP);
-    double uRP = (ux - uPA) * r_rdr * r_rdr + uPA; // corrected axial velocity
+    double r_RP = rx + drx; // corrected radius
+    double r_rdr = rx / (r_RP);
+    c_uRP = (ux - c_uPA) * r_rdr * r_rdr + c_uPA; // corrected axial velocity
 
     // Rudder area seen by the slipstream
-    double A_RP = (2. * rRP / hR) * A_R;
+    c_A_RP_m2 = 2. * r_RP < h_R ?  (2. * r_RP / h_R) * A_R : A_R;
 
     // TODO: ici, on calcule les efforts de portance et de trainee
 
-    double vRP = vRA; // Radial velocity at the rudder position
+    c_vRP = c_vRA; // Radial velocity at the rudder position
 
 
     /// Debut du code replique
     // Drift angle in the slipstream
-    double beta_RP = std::atan2(vRP, uRP);
+    c_beta_RP_rad = std::atan2(c_vRP, c_uRP);
 
     // Attack angle in the slipstream
-    double alpha_RP_rad = rudder_angle_rad - beta_RP;
+    c_alpha_RP_rad = c_rudder_angle_rad - c_beta_RP_rad;
 
     // Get Coefficients
     double cl_RP, cd_RP, cn_RP;
-    m_rudder->GetClCdCn(alpha_RP_rad, rudder_angle_rad, cl_RP, cd_RP, cn_RP);
+    m_rudder->GetClCdCn(c_alpha_RP_rad, c_rudder_angle_rad, cl_RP, cd_RP, cn_RP);
 
     // Correction for the influence of lateral variation of flow speed
-    double d = 0.886 * rRP;
+    double d = 0.886 * r_RP;
     double f = 2. * std::pow(2. / (2. + d / c), 8);
-    double lambda = std::pow(uPA / uRP, f);
+    double lambda = std::pow(c_uPA / c_uRP, f);
     cl_RP *= lambda;
 
     // Stagnation pressure ar rudder level
-    double q_RP = 0.5 * water_density * (uRP * uRP + vRP * vRP);
+    double q_RP = 0.5 * water_density * (c_uRP * c_uRP + c_vRP * c_vRP);
 
     // Computing loads at rudder in the slipstream
-    double lift_RP = q_RP * cl_RP * A_RP; // FIXME: prise en compte du signe de alpha_RP_rad ??
-    double drag_RP = q_RP * cd_RP * A_RP;
-    double torque_RP = q_RP * cn_RP * A_RP * c;
+    c_lift_RP_N = q_RP * cl_RP * c_A_RP_m2; // FIXME: prise en compte du signe de alpha_RP_rad ??
+    c_drag_RP_N = q_RP * cd_RP * c_A_RP_m2;
+    c_torque_RP_Nm = q_RP * cn_RP * c_A_RP_m2 * c;
 
     // Projection
-    double Cbeta_RP = std::cos(beta_RP);
-    double Sbeta_RP = std::sin(beta_RP);
+    double Cbeta_RP = std::cos(c_beta_RP_rad);
+    double Sbeta_RP = std::sin(c_beta_RP_rad);
 
-    double fx_RP = Cbeta_RP * drag_RP - Sbeta_RP * lift_RP;
-    double fy_RP = Sbeta_RP * drag_RP + Cbeta_RP * lift_RP;
+    c_fx_RP_N = Cbeta_RP * c_drag_RP_N - Sbeta_RP * c_lift_RP_N;
+    c_fy_RP_N = Sbeta_RP * c_drag_RP_N + Cbeta_RP * c_lift_RP_N;
 
     /// Fin du code replique
 
@@ -161,35 +163,35 @@ namespace acme {
     /**
      * Dealing with rudder forces OUTSIDE the slipstream of the propeller (RA) (no influence of the propeller)
      */
-
+    //TODO : skip if no rudder outside the slipstream
     /// Debut du code replique
     // Drift angle in the slipstream
-    double beta_RA = std::atan2(vRA, uRA);
+    c_beta_RA_rad = std::atan2(c_vRA, c_uRA);
 
     // Attack angle in the slipstream
-    double alpha_RA_rad = rudder_angle_rad - beta_RA;
+    c_alpha_RA_rad = c_rudder_angle_rad - c_beta_RA_rad;
 
     // Get Coefficients
     double cl_RA, cd_RA, cn_RA;
-    m_rudder->GetClCdCn(alpha_RA_rad, rudder_angle_rad, cl_RA, cd_RA, cn_RA);
+    m_rudder->GetClCdCn(c_alpha_RA_rad, c_rudder_angle_rad, cl_RA, cd_RA, cn_RA);
 
     // Stagnation pressure ar rudder level
-    double q_RA = 0.5 * water_density * (uRP * uRP + vRP * vRP);
+    double q_RA = 0.5 * water_density * (c_uRP * c_uRP + c_vRP * c_vRP);
 
     // Rudder area outside of the slipstream
-    double A_RA = A_R - A_RP;
+    c_A_RA_m2 = A_R - c_A_RP_m2;
 
     // Computing loads at rudder in the slipstream
-    double lift_RA = q_RA * cl_RA * A_RA; // FIXME: prise en compte du signe de alpha_RP_rad ??
-    double drag_RA = q_RA * cd_RA * A_RA;
-    double torque_RA = q_RA * cn_RA * A_RA * c;
+    c_lift_RA_N = q_RA * cl_RA * c_A_RA_m2; // FIXME: prise en compte du signe de alpha_RP_rad ??
+    c_drag_RA_N = q_RA * cd_RA * c_A_RA_m2;
+    c_torque_RA_Nm = q_RA * cn_RA * c_A_RA_m2 * c;
 
     // Projection
-    double Cbeta_RA = std::cos(beta_RA);
-    double Sbeta_RA = std::sin(beta_RA);
+    double Cbeta_RA = std::cos(c_beta_RA_rad);
+    double Sbeta_RA = std::sin(c_beta_RA_rad);
 
-    double fx_RA = Cbeta_RA * drag_RA - Sbeta_RA * lift_RA;
-    double fy_RA = Sbeta_RA * drag_RA + Cbeta_RA * lift_RA;
+    c_fx_RA_N = Cbeta_RA * c_drag_RA_N - Sbeta_RA * c_lift_RA_N;
+    c_fy_RA_N = Sbeta_RA * c_drag_RA_N + Cbeta_RA * c_lift_RA_N;
     /// Fin du code replique
 
 
@@ -197,10 +199,45 @@ namespace acme {
      * Summing up rudder forces from outside and inside the propeller slipstream
      */
 
-    double fx_R = fx_RA + fx_RP;
-    double fy_R = fy_RA + fy_RP;
-    double torque_R = (torque_RA + torque_RP) - xr * fy_R;  // Transport of the rudder torque to the propeller location
+    c_fx_R_N = c_fx_RA_N + c_fx_RP_N;
+    c_fy_R_N = c_fy_RA_N + c_fy_RP_N;
+    c_torque_R_Nm = (c_torque_RA_Nm + c_torque_RP_Nm) - xr * c_fy_R_N;  // Transport of the rudder torque to the propeller location
 
+  }
+
+  template<class Propeller, class Rudder>
+  double PropellerRudder<Propeller, Rudder>::GetPropellerThrust() const {
+    return m_propeller->GetThrust();
+  }
+
+  template<class Propeller, class Rudder>
+  double PropellerRudder<Propeller, Rudder>::GetPropellerTorque() const {
+    return m_propeller->GetTorque();
+  }
+
+  template<class Propeller, class Rudder>
+  double PropellerRudder<Propeller, Rudder>::GetPropellerEfficiency() const {
+    return m_propeller->GetPropellerEfficiency();
+  }
+
+  template<class Propeller, class Rudder>
+  double PropellerRudder<Propeller, Rudder>::GetPropellerPower() const {
+    return m_propeller->GetPower();
+  }
+
+  template<class Propeller, class Rudder>
+  double PropellerRudder<Propeller, Rudder>::GetPropellerRudderFx() const {
+    return c_fx_R_N + GetPropellerThrust();
+  }
+
+  template<class Propeller, class Rudder>
+  double PropellerRudder<Propeller, Rudder>::GetPropellerRudderFy() const {
+    return c_fy_R_N;
+  }
+
+  template<class Propeller, class Rudder>
+  double PropellerRudder<Propeller, Rudder>::GetPropellerRudderMz() const {
+    return c_torque_R_Nm;
   }
 
 

@@ -50,19 +50,26 @@ namespace acme {
     //    becomes only resistive and gives no thrust despite its direction of rotation that has not changed. For
     //    simulations requiring this kind of regime to be taken into account, a FPP4 model would be best required.
 
-    // TODO: introduire un Jmax dans les tables Kt/Kq open water et traiter le cas où on a J > Jmax
     double J;
     double kt, kq;
     bool is_out_of_range = false;
     if (n > 0.) {
       J = uPA / (n * m_params.m_diameter_m);
-      GetKtKq(J, kt, kq);  // FIXME: renvoie des valeurs negatives pour kt et kq...
-      // TODO: traiter le cas J > Jmax
-    } else {
+      try {
+        GetKtKq(J, kt, kq);
+      } catch (std::exception &e) {
+        // J > Jmax
+        std::string error(e.what());
+        throw std::runtime_error(
+            "FPP1Q : advance ratio not in the correct range, try using FPP4Q if necessary : " + error);
+      }
+    } else if (n == 0) {
       // Bof bof...
       kt = 0.;
       kq = 0.;
       is_out_of_range = true;
+    } else {
+      throw std::runtime_error("FPP1Q : negative propeller rotational velocity are not supported");
     }
 
     // Propeller Thrust

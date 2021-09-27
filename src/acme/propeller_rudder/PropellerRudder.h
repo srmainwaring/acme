@@ -42,7 +42,7 @@ namespace acme {
                          const double &pitch_ratio,
                          const double &rudder_angle_deg) const = 0;
 
-    virtual double GetpropellerThrust() const = 0;
+    virtual double GetPropellerThrust() const = 0;
 
     virtual double GetPropellerTorque() const = 0;
 
@@ -50,17 +50,26 @@ namespace acme {
 
     virtual double GetPropellerPower() const = 0;
 
-    virtual double GetRudderLift() const = 0;
-
-    virtual double GetRudderDrag() const = 0;
-
-    virtual double GetRudderMz() const = 0;
+//    virtual double GetRudderLift() const = 0;
+//
+//    virtual double GetRudderDrag() const = 0;
+//
+//    virtual double GetRudderMz() const = 0;
 
     virtual double GetPropellerRudderFx() const = 0;
 
     virtual double GetPropellerRudderFy() const = 0;
 
     virtual double GetPropellerRudderMz() const = 0;
+
+   protected:
+
+    mutable double c_rudder_angle_rad;
+    mutable double c_drift_angle_rad;
+    mutable double c_attack_angle_rad;
+    mutable double c_rudder_drift_N;
+    mutable double c_rudder_drag_N;
+    mutable double c_rudder_torque_Nm;
 
   };
 
@@ -85,29 +94,64 @@ namespace acme {
                  const double &pitch_ratio,
                  const double &rudder_angle_deg) const override;
 
-    double GetpropellerThrust() const override {};
+    double GetPropellerThrust() const override;
 
-    double GetPropellerTorque() const override {};
+    double GetPropellerTorque() const override;
 
-    double GetPropellerEfficiency() const override {};
+    double GetPropellerEfficiency() const override;
 
-    double GetPropellerPower() const override {};
+    double GetPropellerPower() const override;
 
-    double GetRudderLift() const override {};
+//    double GetRudderLift() const override {};
+//
+//    double GetRudderDrag() const override {};
+//
+//    double GetRudderMz() const override {};
 
-    double GetRudderDrag() const override {};
+    double GetPropellerRudderFx() const override;
 
-    double GetRudderMz() const override {};
+    double GetPropellerRudderFy() const override;
 
-    double GetPropellerRudderFx() const override {};
-
-    double GetPropellerRudderFy() const override {};
-
-    double GetPropellerRudderMz() const override {};
+    double GetPropellerRudderMz() const override;;
 
    private:
     std::unique_ptr<Propeller> m_propeller;
     std::unique_ptr<Rudder> m_rudder;
+
+    // Propeller
+    mutable double c_uPA; // Propeller advance velocity
+    mutable double c_vPA;
+
+    // Rudder
+    mutable double c_rudder_angle_rad;
+    mutable double c_fx_R_N;
+    mutable double c_fy_R_N;
+    mutable double c_torque_R_Nm;
+
+    //    Outside slipstream
+    mutable double c_A_RA_m2;
+    mutable double c_uRA;
+    mutable double c_vRA;
+    mutable double c_alpha_RA_rad; //drift angle
+    mutable double c_beta_RA_rad; //drift angle
+    mutable double c_drag_RA_N;
+    mutable double c_lift_RA_N;
+    mutable double c_torque_RA_Nm;
+    mutable double c_fx_RA_N;
+    mutable double c_fy_RA_N;
+
+    //    Inside slipstream
+    mutable double c_A_RP_m2;
+    mutable double c_uRP;
+    mutable double c_vRP;
+    mutable double c_alpha_RP_rad; //drift angle
+    mutable double c_beta_RP_rad; //drift angle
+    mutable double c_drag_RP_N;
+    mutable double c_lift_RP_N;
+    mutable double c_torque_RP_Nm;
+    mutable double c_fx_RP_N;
+    mutable double c_fy_RP_N;
+
 
   };
 
