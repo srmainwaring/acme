@@ -51,7 +51,7 @@ namespace acme {
     double wr0 = rudder_params.m_hull_wake_fraction_0; // rudder wake fraction in straight line
 
     double u_R0 = u_NWU_propeller;
-    double v_R0 = v_NWU_propeller - r * xr;  // Transport of the propeller velocity to the rudder position
+    double v_R0 = v_NWU_propeller + r * xr;  // Transport of the propeller velocity to the rudder position
 
     double rudder_sidewash_angle_0 = std::atan2(v_R0, u_R0);
 
@@ -89,73 +89,86 @@ namespace acme {
     // Stagnation pressure at propeller position
     double q_PA = 0.5 * water_density * (c_uPA * c_uPA + c_vPA * c_vPA);
 
-    // Thrust loading coefficient
-    double Cth = std::abs(m_propeller->GetThrust() / (q_PA * Ap));
+    if (q_PA == 0.) {
+      c_uRP = 0.;
+      c_vRP = c_vRA;
+      c_A_RP_m2 = 0.;
+      c_beta_RP_rad = 0.;
+      c_alpha_RP_rad = c_rudder_angle_rad;
+      c_drag_RP_N = 0.;
+      c_lift_RP_N = 0.;
+      c_torque_RP_Nm = 0.;
+      c_fx_RP_N = 0.;
+      c_fy_RP_N = 0.;
+    } else {
+      // Thrust loading coefficient
+      double Cth = std::abs(m_propeller->GetThrust() / (q_PA * Ap));
 
-    // Mean axial speed of the slipstream far behind the propeller
-    double u_inf = c_uPA * std::sqrt(1. + Cth);
+      // Mean axial speed of the slipstream far behind the propeller
+      double u_inf = c_uPA * std::sqrt(1. + Cth);
 
-    // Slipstream radius far behind the propeller (potential)
-    double r_inf = r0 * std::sqrt(0.5 * (1. + c_uPA / u_inf));
+      // Slipstream radius far behind the propeller (potential)
+      double r_inf = r0 * std::sqrt(0.5 * (1. + c_uPA / u_inf));
 
-    // Slipstream radius at rudder position (potential)
-    double rinf_r0 = r_inf / r0;
-    double rinf_r0_3 = std::pow(rinf_r0, 3);
-    double x_r0_1_5 = std::pow(xr / r0, 1.5);
+      // Slipstream radius at rudder position (potential)
+      double rinf_r0 = r_inf / r0;
+      double rinf_r0_3 = std::pow(rinf_r0, 3);
+      double x_r0_1_5 = std::pow(xr / r0, 1.5);
 
-    double rx = r0 * (0.14 * rinf_r0_3 + rinf_r0 * x_r0_1_5) / (0.14 * rinf_r0_3 + x_r0_1_5);
+      double rx = r0 * (0.14 * rinf_r0_3 + rinf_r0 * x_r0_1_5) / (0.14 * rinf_r0_3 + x_r0_1_5);
 
-    // Axial velocity at rudder position (potential)
-    double rinf_rx = r_inf / rx;
-    double ux = u_inf * rinf_rx * rinf_rx;
+      // Axial velocity at rudder position (potential)
+      double rinf_rx = r_inf / rx;
+      double ux = u_inf * rinf_rx * rinf_rx;
 
-    // Turbulent mixing correction on radius
-    double drx = 0.15 * xr * (ux - c_uPA) / (ux + c_uPA);
+      // Turbulent mixing correction on radius
+      double drx = 0.15 * xr * (ux - c_uPA) / (ux + c_uPA);
 
-    // Corrected radius and axial velocities
-    double r_RP = rx + drx; // corrected radius
-    double r_rdr = rx / (r_RP);
-    c_uRP = (ux - c_uPA) * r_rdr * r_rdr + c_uPA; // corrected axial velocity
+      // Corrected radius and axial velocities
+      double r_RP = rx + drx; // corrected radius
+      double r_rdr = rx / (r_RP);
+      c_uRP = (ux - c_uPA) * r_rdr * r_rdr + c_uPA; // corrected axial velocity
 
-    // Rudder area seen by the slipstream
-    c_A_RP_m2 = 2. * r_RP < h_R ?  (2. * r_RP / h_R) * A_R : A_R;
+      // Rudder area seen by the slipstream
+      c_A_RP_m2 = 2. * r_RP < h_R ? (2. * r_RP / h_R) * A_R : A_R;
 
-    // TODO: ici, on calcule les efforts de portance et de trainee
+      // TODO: ici, on calcule les efforts de portance et de trainee
 
-    c_vRP = c_vRA; // Radial velocity at the rudder position
+      c_vRP = c_vRA; // Radial velocity at the rudder position
 
 
-    /// Debut du code replique
-    // Drift angle in the slipstream
-    c_beta_RP_rad = std::atan2(c_vRP, c_uRP);
+      /// Debut du code replique
+      // Drift angle in the slipstream
+      c_beta_RP_rad = std::atan2(c_vRP, c_uRP);
 
-    // Attack angle in the slipstream
-    c_alpha_RP_rad = c_rudder_angle_rad - c_beta_RP_rad;
+      // Attack angle in the slipstream
+      c_alpha_RP_rad = mathutils::Normalize_0_2PI(c_rudder_angle_rad - c_beta_RP_rad);
 
-    // Get Coefficients
-    double cl_RP, cd_RP, cn_RP;
-    m_rudder->GetClCdCn(c_alpha_RP_rad, c_rudder_angle_rad, cl_RP, cd_RP, cn_RP);
+      // Get Coefficients
+      double cl_RP, cd_RP, cn_RP;
+      m_rudder->GetClCdCn(c_alpha_RP_rad, c_rudder_angle_rad, cl_RP, cd_RP, cn_RP);
 
-    // Correction for the influence of lateral variation of flow speed
-    double d = 0.886 * r_RP;
-    double f = 2. * std::pow(2. / (2. + d / c), 8);
-    double lambda = std::pow(c_uPA / c_uRP, f);
-    cl_RP *= lambda;
+      // Correction for the influence of lateral variation of flow speed
+      double d = 0.886 * r_RP;
+      double f = 2. * std::pow(2. / (2. + d / c), 8);
+      double lambda = std::pow(c_uPA / c_uRP, f);
+      cl_RP *= lambda;
 
-    // Stagnation pressure ar rudder level
-    double q_RP = 0.5 * water_density * (c_uRP * c_uRP + c_vRP * c_vRP);
+      // Stagnation pressure ar rudder level
+      double q_RP = 0.5 * water_density * (c_uRP * c_uRP + c_vRP * c_vRP);
 
-    // Computing loads at rudder in the slipstream
-    c_lift_RP_N = q_RP * cl_RP * c_A_RP_m2; // FIXME: prise en compte du signe de alpha_RP_rad ??
-    c_drag_RP_N = q_RP * cd_RP * c_A_RP_m2;
-    c_torque_RP_Nm = q_RP * cn_RP * c_A_RP_m2 * c;
+      // Computing loads at rudder in the slipstream
+      c_lift_RP_N = q_RP * cl_RP * c_A_RP_m2; // FIXME: prise en compte du signe de alpha_RP_rad ??
+      c_drag_RP_N = q_RP * cd_RP * c_A_RP_m2;
+      c_torque_RP_Nm = q_RP * cn_RP * c_A_RP_m2 * c;
 
-    // Projection
-    double Cbeta_RP = std::cos(c_beta_RP_rad);
-    double Sbeta_RP = std::sin(c_beta_RP_rad);
+      // Projection
+      double Cbeta_RP = std::cos(c_beta_RP_rad);
+      double Sbeta_RP = std::sin(c_beta_RP_rad);
 
-    c_fx_RP_N = Cbeta_RP * c_drag_RP_N - Sbeta_RP * c_lift_RP_N;
-    c_fy_RP_N = Sbeta_RP * c_drag_RP_N + Cbeta_RP * c_lift_RP_N;
+      c_fx_RP_N = Cbeta_RP * c_drag_RP_N - Sbeta_RP * c_lift_RP_N;
+      c_fy_RP_N = Sbeta_RP * c_drag_RP_N + Cbeta_RP * c_lift_RP_N;
+    }
 
     /// Fin du code replique
 
@@ -163,37 +176,49 @@ namespace acme {
     /**
      * Dealing with rudder forces OUTSIDE the slipstream of the propeller (RA) (no influence of the propeller)
      */
-    //TODO : skip if no rudder outside the slipstream
-    /// Debut du code replique
-    // Drift angle in the slipstream
-    c_beta_RA_rad = std::atan2(c_vRA, c_uRA);
-
-    // Attack angle in the slipstream
-    c_alpha_RA_rad = c_rudder_angle_rad - c_beta_RA_rad;
-
-    // Get Coefficients
-    double cl_RA, cd_RA, cn_RA;
-    m_rudder->GetClCdCn(c_alpha_RA_rad, c_rudder_angle_rad, cl_RA, cd_RA, cn_RA);
-
-    // Stagnation pressure ar rudder level
-    double q_RA = 0.5 * water_density * (c_uRP * c_uRP + c_vRP * c_vRP);
 
     // Rudder area outside of the slipstream
     c_A_RA_m2 = A_R - c_A_RP_m2;
 
-    // Computing loads at rudder in the slipstream
-    c_lift_RA_N = q_RA * cl_RA * c_A_RA_m2; // FIXME: prise en compte du signe de alpha_RP_rad ??
-    c_drag_RA_N = q_RA * cd_RA * c_A_RA_m2;
-    c_torque_RA_Nm = q_RA * cn_RA * c_A_RA_m2 * c;
+    // test if rudder has area outside the slipstream
+    if (c_A_RA_m2 > 0) {
 
-    // Projection
-    double Cbeta_RA = std::cos(c_beta_RA_rad);
-    double Sbeta_RA = std::sin(c_beta_RA_rad);
+      /// Debut du code replique
+      // Drift angle outside the slipstream
+      c_beta_RA_rad = std::atan2(c_vRA, c_uRA);
 
-    c_fx_RA_N = Cbeta_RA * c_drag_RA_N - Sbeta_RA * c_lift_RA_N;
-    c_fy_RA_N = Sbeta_RA * c_drag_RA_N + Cbeta_RA * c_lift_RA_N;
-    /// Fin du code replique
+      // Attack angle outside the slipstream
+      c_alpha_RA_rad = mathutils::Normalize_0_2PI(c_rudder_angle_rad - c_beta_RA_rad);
 
+      // Get Coefficients
+      double cl_RA, cd_RA, cn_RA;
+      m_rudder->GetClCdCn(c_alpha_RA_rad, c_rudder_angle_rad, cl_RA, cd_RA, cn_RA);
+
+      // Stagnation pressure ar rudder level
+      double q_RA = 0.5 * water_density * (c_uRA * c_uRA + c_vRA * c_vRA);
+
+      // Computing loads at rudder outside the slipstream
+      c_lift_RA_N = q_RA * cl_RA * c_A_RA_m2; // FIXME: prise en compte du signe de alpha_RP_rad ??
+      c_drag_RA_N = q_RA * cd_RA * c_A_RA_m2;
+      c_torque_RA_Nm = q_RA * cn_RA * c_A_RA_m2 * c;
+
+      // Projection
+      double Cbeta_RA = std::cos(c_beta_RA_rad);
+      double Sbeta_RA = std::sin(c_beta_RA_rad);
+
+      c_fx_RA_N = Cbeta_RA * c_drag_RA_N - Sbeta_RA * c_lift_RA_N;
+      c_fy_RA_N = Sbeta_RA * c_drag_RA_N + Cbeta_RA * c_lift_RA_N;
+      /// Fin du code replique
+    }
+    else {
+      c_beta_RA_rad = 0.;
+      c_alpha_RA_rad = c_rudder_angle_rad;
+      c_lift_RA_N = 0.;
+      c_drag_RA_N = 0.;
+      c_torque_RA_Nm = 0.;
+      c_fx_RA_N = 0.;
+      c_fy_RA_N = 0.;
+    }
 
     /**
      * Summing up rudder forces from outside and inside the propeller slipstream
