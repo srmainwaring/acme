@@ -289,10 +289,10 @@ namespace acme {
 
     // Rudder
 
-    rudder_message->AddField<double>("fx", "N", "Total longitudinal force delivered vy the rudder",
+    rudder_message->AddField<double>("fx", "N", "Total longitudinal force delivered by the rudder",
                                      [this]() { return c_fx_R_N; });
 
-    rudder_message->AddField<double>("fx", "N", "Total transversal force delivered vy the rudder",
+    rudder_message->AddField<double>("fy", "N", "Total transversal force delivered by the rudder",
                                      [this]() { return c_fy_R_N; });
 
     rudder_message->AddField<double>("mz_R", "Nm", "Total torque delivered by the rudder, at the rudder position",
@@ -304,8 +304,8 @@ namespace acme {
 
     //        outside slipstream
 
-    rudder_message->AddField<double>("area_ratio_RA", "", "Ratio of the rudder area outside the slipstream",
-                                     [this]() { return c_A_RA_m2 / m_rudder->GetParameters()->m_lateral_area_m2; });
+    rudder_message->AddField<double>("area_RA", "m2", "Rudder area outside the slipstream",
+                                     [this]() { return c_A_RA_m2 ; });
 
     rudder_message->AddField<double>("DriftAngle_RA", "rad", "Drift angle outside the slipstream",
                                      [this]() { return c_beta_RA_rad; });
@@ -313,10 +313,10 @@ namespace acme {
     rudder_message->AddField<double>("AttackAngle_RA", "rad", "Attack angle outside the slipstream",
                                      [this]() { return c_alpha_RA_rad; });
 
-    rudder_message->AddField<double>("uRA", "m/s", "Longitudinal velocity",
+    rudder_message->AddField<double>("u_RA", "m/s", "Longitudinal velocity",
                                      [this]() { return c_uRA; });
 
-    rudder_message->AddField<double>("vRA", "m/s", "transversal velocity",
+    rudder_message->AddField<double>("v_RA", "m/s", "transversal velocity",
                                      [this]() { return c_vRA; });
 
     rudder_message->AddField<double>("Drag_RA", "N", "Drag delivered by the part of the rudder outside the slipstream",
@@ -331,19 +331,19 @@ namespace acme {
 
     //        inside slipstream
 
-    rudder_message->AddField<double>("area_ratio_RP", "", "Ratio of the rudder area in the slipstream",
-                                     [this]() { return c_A_RP_m2 / m_rudder->GetParameters()->m_lateral_area_m2; });
+    rudder_message->AddField<double>("area_RP", "m2", "Rudder area in the slipstream",
+                                     [this]() { return c_A_RP_m2; });
 
     rudder_message->AddField<double>("DriftAngle_RP", "rad", "Drift angle inside the slipstream",
-                                     [this]() { c_beta_RP_rad; });
+                                     [this]() { return c_beta_RP_rad; });
 
     rudder_message->AddField<double>("AttackAngle_RP", "rad", "Attack angle inside the slipstream",
                                      [this]() { return c_alpha_RP_rad; });
 
-    rudder_message->AddField<double>("uRP", "m/s", "Longitudinal velocity",
+    rudder_message->AddField<double>("u_RP", "m/s", "Longitudinal velocity",
                                      [this]() { return c_uRP; });
 
-    rudder_message->AddField<double>("vRP", "m/s", "transversal velocity",
+    rudder_message->AddField<double>("v_RP", "m/s", "transversal velocity",
                                      [this]() { return c_vRP; });
 
     rudder_message->AddField<double>("Drag_RP", "N", "Drag delivered by the part of the rudder in the slipstream",

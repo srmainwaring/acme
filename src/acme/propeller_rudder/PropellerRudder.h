@@ -51,11 +51,11 @@ namespace acme {
 
     virtual double GetPropellerPower() const = 0;
 
-//    virtual double GetRudderLift() const = 0;
-//
-//    virtual double GetRudderDrag() const = 0;
-//
-//    virtual double GetRudderMz() const = 0;
+    virtual double GetRudderFx() const = 0;
+
+    virtual double GetRudderFy() const = 0;
+
+    virtual double GetRudderMz() const = 0;
 
     virtual double GetPropellerRudderFx() const = 0;
 
@@ -105,11 +105,11 @@ namespace acme {
 
     double GetPropellerPower() const override;
 
-//    double GetRudderLift() const override {};
-//
-//    double GetRudderDrag() const override {};
-//
-//    double GetRudderMz() const override {};
+    double GetRudderFx() const override { return c_fx_R_N; };
+
+    double GetRudderFy() const override { return c_fy_R_N; };
+
+    double GetRudderMz() const override { return c_torque_R_Nm; };
 
     double GetPropellerRudderFx() const override;
 
