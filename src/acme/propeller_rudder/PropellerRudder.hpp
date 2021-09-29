@@ -74,7 +74,7 @@ namespace acme {
     c_vPA = v_NWU_propeller;
 
     // Propeller data
-    double r0 = propeller_params.m_diameter_m;  // Propeller radius
+    double r0 = 0.5 * propeller_params.m_diameter_m;  // Propeller radius
     double Ap = MU_PI * r0 * r0;  // Propeller disk area
 
     // Rudder data
@@ -142,7 +142,7 @@ namespace acme {
       c_beta_RP_rad = std::atan2(c_vRP, c_uRP);
 
       // Attack angle in the slipstream
-      c_alpha_RP_rad = mathutils::Normalize_0_2PI(c_rudder_angle_rad - c_beta_RP_rad);
+      c_alpha_RP_rad = mathutils::Normalize__PI_PI(c_rudder_angle_rad - c_beta_RP_rad);
 
       // Get Coefficients
       double cl_RP, cd_RP, cn_RP;
@@ -188,7 +188,7 @@ namespace acme {
       c_beta_RA_rad = std::atan2(c_vRA, c_uRA);
 
       // Attack angle outside the slipstream
-      c_alpha_RA_rad = mathutils::Normalize_0_2PI(c_rudder_angle_rad - c_beta_RA_rad);
+      c_alpha_RA_rad = mathutils::Normalize__PI_PI(c_rudder_angle_rad - c_beta_RA_rad);
 
       // Get Coefficients
       double cl_RA, cd_RA, cn_RA;
