@@ -14,3 +14,7 @@ set(MATHUTILS_BUILD_BOOST_TESTS OFF CACHE BOOL "")
 # GoogleTest
 set(googletest_URL https://github.com/google/googletest.git)
 set(googletest_TAG release-1.10.0 CACHE STRING "googletest version")
+
+# hermes
+set(hermes_URL git@frydom-ce.org:ce/hermes.git)
+set(hermes_TAG v1.4 CACHE STRING " version")

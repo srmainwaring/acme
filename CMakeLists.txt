@@ -48,6 +48,7 @@ list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 
 include(Add_mathutils)
 include(Add_json)
+include(Add_hermes)
 
 #=============================================================================
 # Adding the ACME project sources

@@ -8,7 +8,8 @@ add_dependencies(acme check_git_${PROJECT_NAME}) # For git_watcher to fetch git 
 
 target_link_libraries(acme
         MathUtils::MathUtils
-        nlohmann_json)
+        nlohmann_json
+        hermes)
 
 add_subdirectory(propeller)
 add_subdirectory(rudder)

@@ -209,8 +209,7 @@ namespace acme {
       c_fx_RA_N = Cbeta_RA * c_drag_RA_N - Sbeta_RA * c_lift_RA_N;
       c_fy_RA_N = Sbeta_RA * c_drag_RA_N + Cbeta_RA * c_lift_RA_N;
       /// Fin du code replique
-    }
-    else {
+    } else {
       c_beta_RA_rad = 0.;
       c_alpha_RA_rad = c_rudder_angle_rad;
       c_lift_RA_N = 0.;
@@ -226,7 +225,8 @@ namespace acme {
 
     c_fx_R_N = c_fx_RA_N + c_fx_RP_N;
     c_fy_R_N = c_fy_RA_N + c_fy_RP_N;
-    c_torque_R_Nm = (c_torque_RA_Nm + c_torque_RP_Nm) - xr * c_fy_R_N;  // Transport of the rudder torque to the propeller location
+    c_torque_R_Nm =
+        (c_torque_RA_Nm + c_torque_RP_Nm) - xr * c_fy_R_N;  // Transport of the rudder torque to the propeller location
 
   }
 
@@ -263,6 +263,98 @@ namespace acme {
   template<class Propeller, class Rudder>
   double PropellerRudder<Propeller, Rudder>::GetPropellerRudderMz() const {
     return c_torque_R_Nm;
+  }
+
+  template<class Propeller, class Rudder>
+  void PropellerRudder<Propeller, Rudder>::DefineLogMessages(hermes::Message *propeller_message,
+                                                             hermes::Message *rudder_message) {
+
+    // Propeller
+    propeller_message->AddField<double>("Thrust", "N", "Thrust delivered by the propeller",
+                                        [this]() { return GetPropellerThrust(); });
+
+    propeller_message->AddField<double>("Torque", "Nm", "Torque delivered by the propeller",
+                                        [this]() { return GetPropellerTorque(); });
+
+    propeller_message->AddField<double>("Power", "W", "Power delivered by the propeller",
+                                        [this]() { return GetPropellerPower(); });
+
+    propeller_message->AddField<double>("uPA", "m/s",
+                                        "Longitudinal velocity at the propeller position, in propeller reference frame",
+                                        [this]() { return c_uPA; });
+
+    propeller_message->AddField<double>("vPA", "m/s",
+                                        "Transverse velocity at the propeller position, in propeller reference frame",
+                                        [this]() { return c_vPA; });
+
+    // Rudder
+
+    rudder_message->AddField<double>("fx", "N", "Total longitudinal force delivered vy the rudder",
+                                     [this]() { return c_fx_R_N; });
+
+    rudder_message->AddField<double>("fx", "N", "Total transversal force delivered vy the rudder",
+                                     [this]() { return c_fy_R_N; });
+
+    rudder_message->AddField<double>("mz_R", "Nm", "Total torque delivered by the rudder, at the rudder position",
+                                     [this]() { return c_torque_RA_Nm + c_torque_RP_Nm; });
+
+    rudder_message->AddField<double>("mz_P", "Nm", "Total torque delivered by the rudder, at the propeller position",
+                                     [this]() { return c_torque_R_Nm; });
+
+
+    //        outside slipstream
+
+    rudder_message->AddField<double>("area_ratio_RA", "", "Ratio of the rudder area outside the slipstream",
+                                     [this]() { return c_A_RA_m2 / m_rudder->GetParameters()->m_lateral_area_m2; });
+
+    rudder_message->AddField<double>("DriftAngle_RA", "rad", "Drift angle outside the slipstream",
+                                     [this]() { return c_beta_RA_rad; });
+
+    rudder_message->AddField<double>("AttackAngle_RA", "rad", "Attack angle outside the slipstream",
+                                     [this]() { return c_alpha_RA_rad; });
+
+    rudder_message->AddField<double>("uRA", "m/s", "Longitudinal velocity",
+                                     [this]() { return c_uRA; });
+
+    rudder_message->AddField<double>("vRA", "m/s", "transversal velocity",
+                                     [this]() { return c_vRA; });
+
+    rudder_message->AddField<double>("Drag_RA", "N", "Drag delivered by the part of the rudder outside the slipstream",
+                                     [this]() { return c_drag_RA_N; });
+
+    rudder_message->AddField<double>("Lift_RA", "N", "Lift delivered by the part of the rudder outside the slipstream",
+                                     [this]() { return c_lift_RA_N; });
+
+    rudder_message->AddField<double>("Torque_RA", "Nm", "Torque delivered by the part of the rudder outside the slipstream",
+                                     [this]() { return c_torque_RA_Nm; });
+
+
+    //        inside slipstream
+
+    rudder_message->AddField<double>("area_ratio_RP", "", "Ratio of the rudder area in the slipstream",
+                                     [this]() { return c_A_RP_m2 / m_rudder->GetParameters()->m_lateral_area_m2; });
+
+    rudder_message->AddField<double>("DriftAngle_RP", "rad", "Drift angle inside the slipstream",
+                                     [this]() { c_beta_RP_rad; });
+
+    rudder_message->AddField<double>("AttackAngle_RP", "rad", "Attack angle inside the slipstream",
+                                     [this]() { return c_alpha_RP_rad; });
+
+    rudder_message->AddField<double>("uRP", "m/s", "Longitudinal velocity",
+                                     [this]() { return c_uRP; });
+
+    rudder_message->AddField<double>("vRP", "m/s", "transversal velocity",
+                                     [this]() { return c_vRP; });
+
+    rudder_message->AddField<double>("Drag_RP", "N", "Drag delivered by the part of the rudder in the slipstream",
+                                     [this]() { return c_drag_RP_N; });
+
+    rudder_message->AddField<double>("Lift_RP", "N", "Lift delivered by the part of the rudder in the slipstream",
+                                     [this]() { return c_lift_RP_N; });
+
+    rudder_message->AddField<double>("Torque_RP", "Nm", "Torque delivered by the part of the rudder in the slipstream",
+                                     [this]() { return c_torque_RP_Nm; });
+
   }
 
 

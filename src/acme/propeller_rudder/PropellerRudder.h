@@ -9,6 +9,7 @@
 
 #include "acme/propeller/PropellerBaseModel.h"
 #include "acme/rudder/SimpleRudderModel.h"
+#include "hermes/hermes.h"
 
 namespace acme {
 
@@ -62,6 +63,8 @@ namespace acme {
 
     virtual double GetPropellerRudderMz() const = 0;
 
+    virtual void DefineLogMessages(hermes::Message* propeller_message, hermes::Message* rudder_message) = 0;
+
    protected:
 
     mutable double c_rudder_angle_rad;
@@ -112,7 +115,9 @@ namespace acme {
 
     double GetPropellerRudderFy() const override;
 
-    double GetPropellerRudderMz() const override;;
+    double GetPropellerRudderMz() const override;
+
+    void DefineLogMessages(hermes::Message* propeller_message, hermes::Message* rudder_message) override;
 
    private:
     std::unique_ptr<Propeller> m_propeller;
