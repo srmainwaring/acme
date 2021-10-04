@@ -19,7 +19,11 @@ namespace acme {
     double m_chord_m; // Rudder chord length at its half height
     double m_height_m;
 
-    double m_hull_wake_fraction_0 = 0.;
+    double m_hull_wake_fraction_0 = 0.; // Straight-run hull wake fraction
+    double m_aHx = 0.; // correction factor for the rudder longitudinal force (in the vessel frame)
+    double m_aHy = 0.; // correction factor for the rudder transversal force (in the vessel frame)
+    double m_xRH = 0.; // Rudder's hydrodynamic abscissa, accounting for the shift of the rudder sway force application
+                       // due to the realization of its part on the hull. Must be positive.
 
     // Optional
     bool m_has_hull_influence;
