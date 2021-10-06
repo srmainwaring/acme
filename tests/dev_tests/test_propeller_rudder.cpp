@@ -131,8 +131,11 @@ int main() {
   double water_density = 1025;
   double u_NWU_propeller_ms = 4;
   double v_NWU_propeller_ms = 0.3;
+  double u_NWU_ship_ms = 5;
+  double v_NWU_ship_ms = 0.;
   double r_rads = 3 * MU_PI_180;
-  double xr_m = 3;
+  double x_pr_m = 3;
+  double x_gr_m = 30;
   double rpm = 200;
   double pitch_ratio = 0.;
   double rudder_angle_deg = 10;
@@ -141,8 +144,11 @@ int main() {
   propeller_rudder->Compute(water_density,
                             u_NWU_propeller_ms,
                             v_NWU_propeller_ms,
+                            u_NWU_ship_ms,
+                            v_NWU_ship_ms,
                             r_rads,
-                            xr_m,
+                            x_pr_m,
+                            x_gr_m,
                             rpm,
                             pitch_ratio,
                             rudder_angle_deg);

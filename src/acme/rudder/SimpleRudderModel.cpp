@@ -37,7 +37,10 @@ namespace acme {
   void SimpleRudderModel::Compute(const double &water_density,
                                   const double &u_NWU,
                                   const double &v_NWU,
-                                  const double &rudder_angle_deg) const {
+                                  const double &rudder_angle_deg,
+                                  const double &v_ship_NWU,
+                                  const double &r_ship_NWU,
+                                  const double &x_r) const {
 
     if (!m_is_initialized) {
       std::cerr << "Propulsion model MUST be initialized before being used." << std::endl;
@@ -60,10 +63,10 @@ namespace acme {
       c_uRA *= (1. - wr);
 
       if (m_params.m_has_hull_influence_transverse_velocity) {
-
-        double kappa = 1.; // TODO: implementer le calcul
+        double beta_R = atan2(v_ship_NWU + 2*x_r*r_ship_NWU, u_NWU);
+        double kappa = HullStraighteningFunction(beta_R);
         c_vRA *= kappa;
-      }
+      };
 
     }
 
@@ -157,6 +160,21 @@ namespace acme {
              << c_drag_N << ';' << c_lift_N << ';' << c_torque_Nm << ';' << c_fx_N << ';'
              << c_fy_N << ';' << std::endl;
     }
+  }
+
+  double SimpleRudderModel::HullStraighteningFunction(const double & beta) {
+    double K2 = 0.5, K3 = 0.45, beta_1 = 1.3, beta_2 = MU_PI_2;
+    double bv = (1-K2)/(beta_2 - beta_1);
+    double av = K2 - bv * beta_1;
+
+    double kappa;
+    if (abs(beta) < beta_1)
+      kappa = std::min(K2, K3 * abs(beta));
+    else if (abs(beta)>beta_2)
+      kappa = 1.;
+    else
+      kappa = av + bv * abs(beta);
+    return kappa;
   }
 
   void ParseRudderJsonString(const std::string &json_string,

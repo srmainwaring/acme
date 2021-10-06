@@ -189,7 +189,7 @@ transverse velocity.
 .. math::
     v_{RA} = \kappa_v(\beta_R) v_{R0}
 
-where :math:`\kappa_v` is the flow straightening corrective function
+where :math:`\kappa_v` is the flow straightening corrective function, and :math:`\beta_R = atan2(v + k x_r r, u)`.
 
 .. math::
     \kappa_v = \begin{cases}

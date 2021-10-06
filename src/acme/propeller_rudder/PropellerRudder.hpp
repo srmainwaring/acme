@@ -23,10 +23,13 @@ namespace acme {
 
   template<class Propeller, class Rudder>
   void PropellerRudder<Propeller, Rudder>::Compute(const double &water_density,
-                                                   const double &u_NWU_propeller, // u_P0
-                                                   const double &v_NWU_propeller, // v_P0
-                                                   const double &r, // Vessel
-                                                   const double &xr,
+                                                   const double &u_NWU_propeller_ms,
+                                                   const double &v_NWU_propeller_ms,
+                                                   const double &u_NWU_ship_ms,
+                                                   const double &v_NWU_ship_ms,
+                                                   const double &r_rads,
+                                                   const double &x_pr_m,
+                                                   const double &x_gr_m,
                                                    const double &rpm,
                                                    const double &pitch_ratio,
                                                    const double &rudder_angle_deg) const {
@@ -37,8 +40,8 @@ namespace acme {
      * https://drive.google.com/file/d/195jz2YHRuhX3tSrqEPNJkYZg_7ZVTcHn/view?usp=sharing
      */
     m_propeller->Compute(water_density,
-                         u_NWU_propeller,
-                         v_NWU_propeller,
+                         u_NWU_propeller_ms,
+                         v_NWU_propeller_ms,
                          rpm,
                          pitch_ratio);
 
@@ -48,30 +51,35 @@ namespace acme {
     /*
      * Computing velocities seen by the rudder outside the slipstream but taking into account the wake fraction
      */
+
     double wr0 = rudder_params.m_hull_wake_fraction_0; // rudder wake fraction in straight line
 
-    double u_R0 = u_NWU_propeller;
-    double v_R0 = v_NWU_propeller + r * xr;  // Transport of the propeller velocity to the rudder position
+    double u_R0 = u_NWU_propeller_ms;
+    double v_R0 = v_NWU_propeller_ms + r_rads * x_pr_m;  // Transport of the propeller velocity to the rudder position
 
-    double rudder_sidewash_angle_0 = std::atan2(v_R0, u_R0);
-
-    // Estimated wake fraction for the rudder
-    double wR = wr0 * std::exp(-4. * rudder_sidewash_angle_0 * rudder_sidewash_angle_0);
-
-    c_uRA = u_R0 * (1 - wR);
-
-    // TODO: ici, pour calculer vRA, on peut appliquer la correction kappa
+    c_uRA = u_R0;
     c_vRA = v_R0;
-    //FIXME
-//    if (rudder_params.m_use_transverse_velocity_correction) {
-//
-//    }
+
+    if (rudder_params.m_has_hull_influence) {
+      double rudder_sidewash_angle_0 = std::atan2(v_R0, u_R0);
+
+      // Estimated wake fraction for the rudder
+      double wR = wr0 * std::exp(-4. * rudder_sidewash_angle_0 * rudder_sidewash_angle_0);
+
+      c_uRA *= (1 - wR);
+
+      if (rudder_params.m_has_hull_influence_transverse_velocity) {
+        double beta_R = atan2(v_NWU_ship_ms + 2 * x_gr_m * r_rads, u_NWU_ship_ms);
+        double kappa = SimpleRudderModel::HullStraighteningFunction(beta_R);
+        c_vRA *= kappa;
+      }
+    }
 
     c_rudder_angle_rad = rudder_angle_deg * MU_PI_180;
 
     // Mean axial speed of inflow to the propeller (with wake fraction correction included)
     c_uPA = m_propeller->GetAdvanceVelocity();
-    c_vPA = v_NWU_propeller;
+    c_vPA = v_NWU_propeller_ms;
 
     // Propeller data
     double r0 = 0.5 * propeller_params.m_diameter_m;  // Propeller radius
@@ -116,7 +124,7 @@ namespace acme {
       // Slipstream radius at rudder position (potential)
       double rinf_r0 = r_inf / r0;
       double rinf_r0_3 = std::pow(rinf_r0, 3);
-      double x_r0_1_5 = std::pow(xr / r0, 1.5);
+      double x_r0_1_5 = std::pow(x_pr_m / r0, 1.5);
 
       double rx = r0 * (0.14 * rinf_r0_3 + rinf_r0 * x_r0_1_5) / (0.14 * rinf_r0_3 + x_r0_1_5);
 
@@ -125,13 +133,13 @@ namespace acme {
       double ux = u_inf * rinf_rx * rinf_rx;
 
       // Turbulent mixing correction on radius
-      double drx = 0.15 * xr * (ux - c_uPA) / (ux + c_uPA);
+      double drx = 0.15 * x_pr_m * (ux - c_uPA) / (ux + c_uPA);
 
       // Corrected radius and axial velocities
       double r_RP = rx + drx; // corrected radius
       double r_rdr = rx / (r_RP);
       auto u_corr = (ux - c_uPA) * r_rdr * r_rdr + c_uPA; // corrected axial velocity
-      c_uRP = (u_corr * u_corr + t * u_NWU_propeller * u_NWU_propeller)/u_corr;
+      c_uRP = (u_corr * u_corr + t * u_NWU_propeller_ms * u_NWU_propeller_ms) / u_corr;
 
       r_RP *= sqrt(u_corr/c_uRP);
 
@@ -241,7 +249,7 @@ namespace acme {
     c_fx_R_N = c_fx_RA_N + c_fx_RP_N;
     c_fy_R_N = c_fy_RA_N + c_fy_RP_N;
     c_torque_R_Nm =
-        (c_torque_RA_Nm + c_torque_RP_Nm) - xr * c_fy_R_N;  // Transport of the rudder torque to the propeller location
+        (c_torque_RA_Nm + c_torque_RP_Nm) - x_pr_m * c_fy_R_N;  // Transport of the rudder torque to the propeller location
 
   }
 
