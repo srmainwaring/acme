@@ -38,6 +38,7 @@ namespace acme {
                                   const double &u_NWU,
                                   const double &v_NWU,
                                   const double &rudder_angle_deg,
+                                  const double &u_ship_NWU,
                                   const double &v_ship_NWU,
                                   const double &r_ship_NWU,
                                   const double &x_r) const {
@@ -63,7 +64,7 @@ namespace acme {
       c_uRA *= (1. - wr);
 
       if (m_params.m_has_hull_influence_transverse_velocity) {
-        double beta_R = atan2(v_ship_NWU + 2*x_r*r_ship_NWU, u_NWU);
+        double beta_R = atan2(v_ship_NWU + 2*x_r*r_ship_NWU, u_ship_NWU);
         double kappa = HullStraighteningFunction(beta_R);
         c_vRA *= kappa;
       };

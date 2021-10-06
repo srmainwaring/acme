@@ -101,6 +101,13 @@ The rudder wake fraction can be expressed as a function of the vessel sidewash a
     \omega_r = \omega_{r0} e^{-K_1 \beta_{R0}^2}
 
 Hull flow straightening effect
+++++++++++++++++++++++++++++++
+
+The Sutulo's model is implemented, see the following section for a more complete description of the phenomenon and the
+different models available.
+
+
+Hull flow straightening effect
 ------------------------------
 
 Terminology
@@ -180,7 +187,7 @@ the straighten rudder drift angle:
 
 They pointed out that the two constants :math:`\gamma_R` and :math:`l'_R` might differ for port and starboard rudders.
 
-Sutulo model
+Sutulo's model
 ++++++++++++
 
 Sutulo extended Inoue's model in the four quadrants of operation, and applied the flow straightening factor to the rudder

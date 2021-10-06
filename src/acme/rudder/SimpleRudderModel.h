@@ -41,13 +41,15 @@ namespace acme {
 
     void Log(bool is_logged);
 
-    virtual void Compute(const double &water_density,
-                         const double &u_NWU,
-                         const double &v_NWU,
-                         const double &rudder_angle_deg,
-                         const double &v_ship_NWU,
-                         const double &r_ship_NWU,
-                         const double &x_r) const;
+    virtual void
+    Compute(const double &water_density,
+            const double &u_NWU,
+            const double &v_NWU,
+            const double &rudder_angle_deg,
+            const double &u_ship_NWU,
+            const double &v_ship_NWU,
+            const double &r_ship_NWU,
+            const double &x_r) const;
 
     static double HullStraighteningFunction(const double & beta);
 

@@ -42,8 +42,8 @@ namespace acme {
     m_propeller->Compute(water_density,
                          u_NWU_propeller_ms,
                          v_NWU_propeller_ms,
-                         rpm,
-                         pitch_ratio);
+                         rpm, <#initializer#>,
+                         pitch_ratio, <#initializer#>, <#initializer#>);
 
     PropellerParams propeller_params = m_propeller->GetParameters();
     RudderParams rudder_params = m_rudder->GetParameters();
