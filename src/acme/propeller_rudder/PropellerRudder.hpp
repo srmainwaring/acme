@@ -82,9 +82,8 @@ namespace acme {
     double A_R = rudder_params.m_lateral_area_m2;// Rudder total area
     double c = rudder_params.m_chord_m;// Rudder chord length at its half height
     double h_R = rudder_params.m_height_m;// Rudder height
-    double a_Hx = rudder_params.m_aHx;
-    double a_Hy = rudder_params.m_aHy;
-    double x_RH = rudder_params.m_xRH;
+    double a_H = rudder_params.m_aH;
+    double dx_RH = rudder_params.m_dxRH;
 
     /**
      * Dealing with rudder forces INSIDE the slipstream of the propeller (RP)
@@ -156,7 +155,7 @@ namespace acme {
       m_rudder->GetClCdCn(c_alpha_RP_rad, c_rudder_angle_rad, cl_RP, cd_RP, cn_RP);
 
       // Correction for the influence of lateral variation of flow speed
-      double d = 0.886 * r_RP;
+      double d = sqrt(MU_PI_2) * r_RP;
       double f = 2. * std::pow(2. / (2. + d / c), 8);
       // FIXME : pow not defined for negative c_uPA / c_uRP
       double lambda = std::pow(c_uPA / c_uRP, f);
@@ -166,24 +165,20 @@ namespace acme {
       double q_RP = 0.5 * water_density * (c_uRP * c_uRP + c_vRP * c_vRP);
 
       // Computing loads at rudder in the slipstream
-      c_lift_RP_N = q_RP * cl_RP * c_A_RP_m2; // FIXME: prise en compte du signe de alpha_RP_rad ??
       c_drag_RP_N = q_RP * cd_RP * c_A_RP_m2;
+      c_lift_RP_N = q_RP * cl_RP * c_A_RP_m2;
       c_torque_RP_Nm = q_RP * cn_RP * c_A_RP_m2 * c;
 
-      // Projection to the rudder frame
-      double Calpha_RP = std::cos(-c_alpha_RP_rad);
-      double Salpha_RP = std::sin(-c_alpha_RP_rad);
-
-      double fx_tmp = Calpha_RP * c_drag_RP_N - Salpha_RP * c_lift_RP_N;
-      double fy_tmp = Salpha_RP * c_drag_RP_N + Calpha_RP * c_lift_RP_N;
+      // Hull/rudder interactions
+      c_lift_RP_N *= (1. + a_H);
+      c_torque_RP_Nm += dx_RH * c_lift_RP_N;
 
       // Projection to the ship frame
-      double Cdelta_RP = std::cos(c_rudder_angle_rad);
-      double Sdelta_RP = std::sin(c_rudder_angle_rad);
+      double Cbeta_RP = std::cos(c_beta_RP_rad);
+      double Sbeta_RP = std::sin(c_beta_RP_rad);
 
-      c_fx_RP_N = (1 + a_Hx) * (Cdelta_RP * fx_tmp - Sdelta_RP * fy_tmp);
-      c_fy_RP_N = (1 + a_Hy) * (Sdelta_RP * fx_tmp + Cdelta_RP * fy_tmp);
-      c_torque_RP_Nm += x_RH * c_fy_RP_N;
+      c_fx_RP_N = Cbeta_RP * c_lift_RP_N - Sbeta_RP * c_drag_RP_N;
+      c_fy_RP_N = Sbeta_RP * c_lift_RP_N + Cbeta_RP * c_drag_RP_N;
     }
 
     /// Fin du code replique
@@ -214,24 +209,20 @@ namespace acme {
       double q_RA = 0.5 * water_density * (c_uRA * c_uRA + c_vRA * c_vRA);
 
       // Computing loads at rudder outside the slipstream
-      c_lift_RA_N = (1 + a_Hx) * q_RA * cl_RA * c_A_RA_m2; // FIXME: prise en compte du signe de alpha_RA_rad ??
-      c_drag_RA_N = (1 + a_Hy) * q_RA * cd_RA * c_A_RA_m2;
+      c_drag_RA_N = q_RA * cd_RA * c_A_RA_m2;
+      c_lift_RA_N = q_RA * cl_RA * c_A_RA_m2;
       c_torque_RA_Nm = q_RA * cn_RA * c_A_RA_m2 * c;
 
+      // Hull/rudder interactions
+      c_lift_RA_N *= (1. + a_H);
+      c_torque_RA_Nm += dx_RH * c_lift_RA_N;
+
       // Projection to the rudder frame
-      double Calpha_RA = std::cos(-c_alpha_RA_rad);
-      double Salpha_RA = std::sin(-c_alpha_RA_rad);
+      double Cbeta_RA = std::cos(c_beta_RA_rad);
+      double Sbeta_RA = std::sin(c_beta_RA_rad);
 
-      double fx_tmp = Calpha_RA * c_drag_RA_N - Salpha_RA * c_lift_RA_N;
-      double fy_tmp = Salpha_RA * c_drag_RA_N + Calpha_RA * c_lift_RA_N;
-
-      // Projection to the ship frame
-      double Cdelta_RA = std::cos(c_rudder_angle_rad);
-      double Sdelta_RA = std::sin(c_rudder_angle_rad);
-
-      c_fx_RA_N = (1 + a_Hx) * (Cdelta_RA * fx_tmp - Sdelta_RA * fy_tmp);
-      c_fy_RA_N = (1 + a_Hy) * (Sdelta_RA * fx_tmp + Cdelta_RA * fy_tmp);
-      c_torque_RA_Nm += x_RH * c_fy_RA_N;
+      c_fx_RA_N = Cbeta_RA * c_drag_RA_N - Sbeta_RA * c_lift_RA_N;
+      c_fy_RA_N = Sbeta_RA * c_drag_RA_N + Cbeta_RA * c_lift_RA_N;
       /// Fin du code replique
     } else {
       c_beta_RA_rad = 0.;

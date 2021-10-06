@@ -17,6 +17,10 @@ While the hull/propeller/rudder interactions are mutual interactions between the
 is usually corrected to take into account these interactions. The propeller loads in the propeller-rudder model are then
 the same as described in section :ref:`propeller_model`.
 
+Several interaction models exist, the current one is based on the one proposed by Söding [Soding1982]_, which can also be
+found in Brix [Brix1993]_ and Sutulo [Sutulo2015]_. Other models were proposed by Inoue [Inoue1981]_, with a variation by
+Ogawa [Ogawa1980]_, or Pershitz [Pershitz1983]_ for low speed manoeuvers.
+
 The propeller influence on the rudder is mainly due to the propeller slipstream washing the rudder.
 Generally the interaction models are based on the “load separation principle” under the following assumptions:
 
@@ -37,6 +41,10 @@ The rudder generalized force can then be decomposed in
 .. math::
     F_{rudder} = F_{rudder}(RA) + F_{rudder}(RP)
 
+
+
+
+
 and for the different components
 
 .. math::
@@ -49,7 +57,7 @@ and for the different components
 .. math::
     \begin{cases}
     D_{RP} &=& \dfrac{1}{2} \rho C_d(\alpha_{RP}) A_{RP} V_{RP}^2\\
-    L_{RP} &=& \dfrac{1}{2} \rho k_d C_l(\alpha_{RP}) A_{RP} V_{RP}^2\\
+    L_{RP} &=& \dfrac{1}{2} \rho C_l(\alpha_{RP}) A_{RP} V_{RP}^2\\
     N_{RP} &=& \dfrac{1}{2} \rho C_n(\alpha_{RP}) A_{RP} V_{RP}^2\\
     \end{cases}
 
@@ -149,16 +157,10 @@ based on the transformation of the circular cross-section of the slipstream to a
     d &=& \sqrt{\pi/4}(r+\Delta r)
     \end{cases}
 
-Lateral velocity in the slipstream
-++++++++++++++++++++++++++++++++++
-
-The lateral velocity in the slipstream at the rudder position is approximated to the one outside the slipstream
-
-.. math::
-    v_{RP} = v_{RA}
-
 
 References
 ----------
-.. [Brix1993] Brix, J. (1993). Manoeuvring technical manual. Hamburg, Germany: Seehafen Verlag.
+.. [Ogawa1980] Ogawa, A., Hasegawa, K., Yoshimura, Y., 1980. Mathematical modeling of the ship’s maneuvering. Nihon Zosen Gakkai-shi (Techno Marine) 616, 565–576
+.. [Pershitz1983] Pershitz, R. Y. (1983). Ship manoeuvrability and steering.
 .. [Soding1982] Söding, H. (1982). Prediction of ship steering capabilities. Schiffstechnik, 29(1), 3-29.
+.. [Sutulo2015] Sutulo, S., & Soares, C. G. (2015). Development of a core mathematical model for arbitrary manoeuvres of a shuttle tanker. Applied Ocean Research, 51, 293-308.

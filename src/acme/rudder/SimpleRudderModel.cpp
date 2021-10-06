@@ -81,11 +81,15 @@ namespace acme {
 
     // Forces in flow frame
     double q = 0.5 * water_density * (c_uRA * c_uRA + c_vRA * c_vRA); // stagnation pressure at rudder position
-    c_lift_N = q * cl *
-               m_params.m_lateral_area_m2; // FIXME: la prise en compte du signe de alpha se fait comment ? dans les tables ?
-    c_drag_N = q * cd * m_params.m_lateral_area_m2; // FIXME: les tables prevoient des coeffs cd negatifs ?
-    c_torque_Nm = q * cn * m_params.m_lateral_area_m2 *
-                  m_params.m_chord_m; // FIXME: la prise en compte du signe de alpha se fait comment ? dans les tables ?
+    c_drag_N = q * cd * m_params.m_lateral_area_m2;
+    c_lift_N = q * cl * m_params.m_lateral_area_m2;
+    c_torque_Nm = q * cn * m_params.m_lateral_area_m2 * m_params.m_chord_m;
+
+    // Hull/rudder interactions
+    if (m_params.m_has_hull_influence) {
+      c_lift_N *= (1. + m_params.m_aH);
+      c_torque_Nm += m_params.m_dxRH * c_lift_N;
+    }
 
     // Forces in body frame
     double Cbeta = std::cos(c_beta_R_rad);
