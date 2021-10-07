@@ -139,9 +139,18 @@ namespace acme {
       double r_RP = rx + drx; // corrected radius
       double r_rdr = rx / (r_RP);
       auto u_corr = (ux - c_uPA) * r_rdr * r_rdr + c_uPA; // corrected axial velocity
-      c_uRP = (u_corr * u_corr + t * u_NWU_propeller_ms * u_NWU_propeller_ms) / u_corr;
 
+      // Correction for the influence of lateral variation of flow speed
+      double d = sqrt(MU_PI_2) * r_RP;
+      double f = 2. * std::pow(2. / (2. + d / c), 8);
+      // FIXME : pow not defined for negative c_uPA / c_uRP
+      double lambda = std::pow(c_uPA / u_corr, f);
+
+      // Influence of the hull in front of the rudder
+      c_uRP = (u_corr * u_corr + t * u_NWU_propeller_ms * u_NWU_propeller_ms) / u_corr;
       r_RP *= sqrt(u_corr/c_uRP);
+
+//      c_uRP = u_corr;
 
       // Rudder area seen by the slipstream
       c_A_RP_m2 = 2. * r_RP < h_R ? (2. * r_RP / h_R) * A_R : A_R;
@@ -161,13 +170,7 @@ namespace acme {
       // Get Coefficients
       double cl_RP, cd_RP, cn_RP;
       m_rudder->GetClCdCn(c_alpha_RP_rad, c_rudder_angle_rad, cl_RP, cd_RP, cn_RP);
-
-      // Correction for the influence of lateral variation of flow speed
-      double d = sqrt(MU_PI_2) * r_RP;
-      double f = 2. * std::pow(2. / (2. + d / c), 8);
-      // FIXME : pow not defined for negative c_uPA / c_uRP
-      double lambda = std::pow(c_uPA / c_uRP, f);
-      cl_RP *= lambda;
+      cl_RP *= lambda; // Influence of lateral variation of flow speed
 
       // Stagnation pressure ar rudder level
       double q_RP = 0.5 * water_density * (c_uRP * c_uRP + c_vRP * c_vRP);
@@ -185,8 +188,8 @@ namespace acme {
       double Cbeta_RP = std::cos(c_beta_RP_rad);
       double Sbeta_RP = std::sin(c_beta_RP_rad);
 
-      c_fx_RP_N = Cbeta_RP * c_lift_RP_N - Sbeta_RP * c_drag_RP_N;
-      c_fy_RP_N = Sbeta_RP * c_lift_RP_N + Cbeta_RP * c_drag_RP_N;
+      c_fx_RP_N = Cbeta_RP * c_drag_RP_N - Sbeta_RP * c_lift_RP_N;
+      c_fy_RP_N = Sbeta_RP * c_drag_RP_N + Cbeta_RP * c_lift_RP_N;
     }
 
     /// Fin du code replique
