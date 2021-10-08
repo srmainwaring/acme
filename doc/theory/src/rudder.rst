@@ -73,6 +73,7 @@ The projection of the drag, lift and torque in the body frame can be written:
 Hull/rudder interactions
 ------------------------
 
+.. _rudder_lift_correction:
 Correction on the lift
 ++++++++++++++++++++++
 
