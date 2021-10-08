@@ -20,7 +20,9 @@ namespace acme {
     double m_height_m;
 
     double m_aH = 0.; // correction factor for the rudder lift force (in the vessel frame)
-    double m_dxRH = 0.; // Rudder's hydrodynamic shift, must be positive for a forward shift. Accounts for the shift of the rudder sway force application
+    double m_xR = 0.; // longitudinal position of the rudder, relatively to the ship COG (approx -0.5 Lpp)
+    double m_xH = 0.; // longitudinal hydrodynamic application point of the additional lift force, accounting for the
+                      // hull influence. (approx -0.45 Lpp)
     double m_hull_wake_fraction_0 = 0.; // Straight-run hull wake fraction
 
     // Optional

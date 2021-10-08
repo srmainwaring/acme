@@ -51,14 +51,21 @@ with the drag, lift and torque components
 
 where :math:`\rho` is the water density, :math:`A_r` is the projected lateral area and :math:`c` is the rudder chord.
 
+Projection in the body frame
+----------------------------
+
+The velocity components are given in the body reference frame, in order to apply the hull/propeller/rudder interactions.
+
+The projection of the drag, lift and torque in the body frame can be written:
+
+.. math::
+    \begin{cases}
+        X &=& D cos(\beta) - L sin(\beta)\\
+        Y &=& D sin(\beta) + L cos(\beta)\\
+        N &=& N
+    \end{cases}
+
 ..
-    The projection to the rudder frame can be written:
-    .. math::
-        \begin{cases}
-            X_{Rr} &=&-D cos(\alpha) - L sin(\alpha)\\
-            Y_{Rr} &=& D sin(\alpha) - L cos(\alpha)\\
-            N_{Rr} &=& N
-        \end{cases}
     :math:`X_{Rr}` and :math:`Y_{Rr}` are respectfully the tangential and normal components of the rudder forces, in the
     rudder reference frame. A common approximation in the literature is to consider only the normal component, the tangential
     being small.
@@ -70,17 +77,21 @@ Correction on the lift
 ++++++++++++++++++++++
 
 As for the propeller, the hull/rudder interaction involves a correction of the lift, due to the upstream presence of the
-hull. However, an additional transverse force of equal direction is generated at the afterbody. Compared to the rudder
-lift without hull interaction, the total transverse force is increased by the factor :math:`1+a_H`.
+hull. However, an additional lift force of equal direction is generated at the afterbody, proportional to the lift,
+leading to a total lift force :
 
 .. math::
-    L = (1 + a_H) \dfrac{1}{2} \rho C_l(\alpha_r) A_r V_{fRA}^2
+    L_{total} = L + L_{add} = (1 + a_H) L
 
-Compared to the free running rudder, the total transverse force application point is shifted forward by :math:`\Delta x_R`.
-The total torque at the rudder position is then
+While the original lift force is applied at the rudder longitudinal position :math:`x_R`, the additional lift is applied
+at the rudder hydrodynamic longitudinal location, :math:`x_H`.
+Several empiric estimation are given for this parameter, a gross approximation is to take : math:`x_H = -0.45 Lpp`
+(when :math:`x_R = -0.5 Lpp` generally).
+
+This means that the torque at the rudder position is
 
 .. math::
-    N = \dfrac{1}{2} \rho C_n(\alpha_r) A_r c V_{fRA}^2 + \Delta x_R L
+    N_{total} = N + a_H (x_H - x_R) L_{add} cos(\beta)
 
 Wake fraction
 +++++++++++++

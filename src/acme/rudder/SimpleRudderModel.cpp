@@ -89,15 +89,15 @@ namespace acme {
     c_lift_N = q * cl * m_params.m_lateral_area_m2;
     c_torque_Nm = q * cn * m_params.m_lateral_area_m2 * m_params.m_chord_m;
 
-    // Hull/rudder interactions
-    if (m_params.m_has_hull_influence) {
-      c_lift_N *= (1. + m_params.m_aH);
-      c_torque_Nm += m_params.m_dxRH * c_lift_N;
-    }
-
     // Forces in body frame
     double Cbeta = std::cos(c_beta_R_rad);
     double Sbeta = std::sin(c_beta_R_rad);
+
+    // Hull/rudder interactions
+    if (m_params.m_has_hull_influence) {
+      c_torque_Nm += m_params.m_aH * (m_params.m_xH - m_params.m_xR) * c_lift_N * Cbeta;
+      c_lift_N *= (1. + m_params.m_aH);
+    }
 
     c_fx_N = Cbeta * c_drag_N - Sbeta * c_lift_N;
     c_fy_N = Sbeta * c_drag_N + Cbeta * c_lift_N;

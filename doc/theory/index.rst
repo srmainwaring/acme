@@ -16,3 +16,8 @@ Theory manual of ACME
    :maxdepth: 5
 
    src/prop_rudder
+
+.. toctree::
+   :maxdepth: 5
+
+   src/validations

@@ -91,7 +91,8 @@ namespace acme {
     double c = rudder_params.m_chord_m;// Rudder chord length at its half height
     double h_R = rudder_params.m_height_m;// Rudder height
     double a_H = rudder_params.m_aH;
-    double dx_RH = rudder_params.m_dxRH;
+    double x_R = rudder_params.m_xR;
+    double x_H = rudder_params.m_xH;
 
     /**
      * Dealing with rudder forces INSIDE the slipstream of the propeller (RP)
@@ -180,13 +181,13 @@ namespace acme {
       c_lift_RP_N = q_RP * cl_RP * c_A_RP_m2;
       c_torque_RP_Nm = q_RP * cn_RP * c_A_RP_m2 * c;
 
-      // Hull/rudder interactions
-      c_lift_RP_N *= (1. + a_H);
-      c_torque_RP_Nm += dx_RH * c_lift_RP_N;
-
       // Projection to the ship frame
       double Cbeta_RP = std::cos(c_beta_RP_rad);
       double Sbeta_RP = std::sin(c_beta_RP_rad);
+
+      // Hull/rudder interactions
+      c_torque_RP_Nm += a_H * (x_H - x_R) * c_lift_RP_N * Cbeta_RP;
+      c_lift_RP_N *= (1. + a_H);
 
       c_fx_RP_N = Cbeta_RP * c_drag_RP_N - Sbeta_RP * c_lift_RP_N;
       c_fy_RP_N = Sbeta_RP * c_drag_RP_N + Cbeta_RP * c_lift_RP_N;
@@ -224,13 +225,13 @@ namespace acme {
       c_lift_RA_N = q_RA * cl_RA * c_A_RA_m2;
       c_torque_RA_Nm = q_RA * cn_RA * c_A_RA_m2 * c;
 
-      // Hull/rudder interactions
-      c_lift_RA_N *= (1. + a_H);
-      c_torque_RA_Nm += dx_RH * c_lift_RA_N;
-
       // Projection to the rudder frame
       double Cbeta_RA = std::cos(c_beta_RA_rad);
       double Sbeta_RA = std::sin(c_beta_RA_rad);
+
+      // Hull/rudder interactions
+      c_torque_RA_Nm += a_H * (x_H - x_R) * c_lift_RA_N * Cbeta_RA;
+      c_lift_RA_N *= (1. + a_H);
 
       c_fx_RA_N = Cbeta_RA * c_drag_RA_N - Sbeta_RA * c_lift_RA_N;
       c_fy_RA_N = Sbeta_RA * c_drag_RA_N + Cbeta_RA * c_lift_RA_N;
