@@ -96,7 +96,7 @@ TEST(TestCPP, parser) {
   EXPECT_EQ(pitch_ratio, pitch_ratio_in);
 
   for (int i = 0; i < beta_in.size(); i++) {
-    EXPECT_NEAR(beta[i] * 180 / MU_PI, beta_in[i], 1E-6);
+    EXPECT_NEAR(beta[i] * MU_180_PI, beta_in[i], 1E-6);
     for (int j = 0; j < pitch_ratio_in.size(); j++) {
 //      std::cout << "(i,j) = (" << i << ',' << j << ')' << std::endl;
       EXPECT_NEAR(ct_in[j][i], ct_cq_coeffs.Eval("ct", beta[i], pitch_ratio[j]), 1E-5);

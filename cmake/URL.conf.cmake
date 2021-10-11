@@ -7,7 +7,7 @@ set(json_TAG v3.6.1 CACHE STRING "json version")
 
 # MathUtils
 set(mathutils_URL git@frydom-ce.org:ce/mathutils.git)
-set(mathutils_TAG v1.7.3 CACHE STRING "mathutils version")
+set(mathutils_TAG v1.8 CACHE STRING "mathutils version")
 set(MATHUTILS_BUILD_TESTS OFF CACHE BOOL "")
 set(MATHUTILS_BUILD_BOOST_TESTS OFF CACHE BOOL "")
 
