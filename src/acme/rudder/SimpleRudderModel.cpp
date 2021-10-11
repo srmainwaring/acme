@@ -21,7 +21,8 @@ namespace acme {
       m_temp_perf_data_json_string(perf_data_json_string),
       m_type(RudderModelType::E_SIMPLE_RUDDER),
       m_is_initialized(false),
-      m_is_logged(false) {
+      m_is_logged(false),
+      m_cl_cd_cn_coeffs(mathutils::LINEAR){
 
   }
 
