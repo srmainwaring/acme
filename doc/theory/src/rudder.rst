@@ -1,21 +1,22 @@
 .. _rudder_model:
 
-Rudder model
-============
+Rudder models
+=============
 
 Frames and conventions
 ----------------------
 
-The convention used here is NWU.
+The convention used here is NWU (North-West-Up).
 
-The drag and lift contributions are expressed respectfully collinear and perpendicular to the inflow velocity field :math:`V_{fR}`,
-with the introduction of a frame :math:`R_f=(O_f,x_f,y_f,z_f)` defined by:
+Three frames can be defined to expressed the rudder loads, see the following :ref:`figure <fig_rudder_frame>`.
 
-- :math:`O_f` is ont the rudder stock, the rudder rotation axis,
-- :math:`z_f` is collinear to the rudder stock, pointing upwards,
-- :math:`y_f = z_f \times \dfrac{-V_{fR}{|V_{fR}|}`, in order to get lift and drag forces in a plane perpendicular to the rudder axis,
-- :math:`x_f = y_f \times z_f`, so that the frame is orthogonal and direct
+- the vessel frame :math:`R_v=(x_v,y_v,z_v)`, with :math:`F_R = (F_X, F_Y, 0)_{R_v}`
+- the rudder frame :math:`R_r=(x_r,y_r,z_r)`, with :math:`F_R = (F_T, F_N, 0)_{R_r}`
+- the inflow frame :math:`R_f=(x_f,y_f,z_f)`, with :math:`F_R = (F_D, F_L, 0)_{R_f}`
 
+The drag :math:`F_D` and lift :math:`F_L` contributions are expressed respectfully collinear and perpendicular to the inflow
+velocity field :math:`V_{fR}`. The normal :math:`F_N` and tangent :math:`F_T` contributions are relative to the rudder
+orientation.
 
 .. _fig_rudder_frame:
 .. figure:: ../_static/rudder_frame.png
@@ -27,72 +28,98 @@ with the introduction of a frame :math:`R_f=(O_f,x_f,y_f,z_f)` defined by:
 The rudder attack angle :math:`\alpha_r` can be expressed using the rudder deflection angle :math:`\delta_r` and the
 local drift angle :math:`\beta_r`.
 
-Expression of the force
------------------------
-
-The generalized force is expressed in the :math:`R_f` frame :
-
 .. math::
-   F_{rudder} =
-   \begin{bmatrix}
-    D & 0 \\
-    L & 0 \\
-    0          & N
-   \end{bmatrix}_{R_f}
+    \alpha_r = \delta_r - \beta_r
 
-with the drag, lift and torque components
+The projection of the rudder loads from the inflow frame, to the vessel frame is then
 
 .. math::
     \begin{cases}
-        D &=& \dfrac{1}{2} \rho C_d(\alpha_r) A_r V_{fRA}^2\\
-        L &=& \dfrac{1}{2} \rho C_l(\alpha_r) A_r V_{fRA}^2\\
-        N &=& \dfrac{1}{2} \rho C_n(\alpha_r) A_r c V_{fRA}^2\\
+        F_X &=& F_D \cos(\beta_r) - F_L \sin(\beta_r)\\
+        F_Y &=& F_D \sin(\beta_r) + F_L \cos(\beta_r)
+    \end{cases}
+
+The projection from the rudder frame to the vessel frame is
+
+.. math::
+    \begin{cases}
+        F_X &=& F_T \cos(\delta_r) - F_N \sin(\delta_r)\\
+        F_Y &=& F_T \sin(\delta_r) + F_N \cos(\delta_r)
+    \end{cases}
+
+..
+    And the projection from the rudder frame to the inflow frame is
+    .. math::
+        \begin{cases}
+            F_D &=& T \cos(\alpha_r) + F_N \sin(\alpha_r)\\
+            F_L &=&-T \sin(\alpha_r) + F_N \cos(\alpha_r)
+        \end{cases}
+
+Drag-Lift model
+---------------
+
+A general procedure to establish the rudder loads is to compute numerically, using CFD, the drag and lift loads along
+with the torque at the rudder stock, and extract the non dimensional coefficients
+:math:`(C_d(\alpha_r), C_l(\alpha_r), C_n(\alpha_r))` function of the attack angle.
+
+.. math::
+    \begin{cases}
+        F_D &=& \dfrac{1}{2} \rho C_d(\alpha_r) A_r V_{fRA}^2\\
+        F_L &=& \dfrac{1}{2} \rho C_l(\alpha_r) A_r V_{fRA}^2\\
+        M_n &=& \dfrac{1}{2} \rho C_n(\alpha_r) A_r c V_{fRA}^2\\
     \end{cases}
 
 where :math:`\rho` is the water density, :math:`A_r` is the projected lateral area and :math:`c` is the rudder chord.
 
-Projection in the body frame
-----------------------------
+Fujii's estimation formula
+--------------------------
 
-The velocity components are given in the body reference frame, in order to apply the hull/propeller/rudder interactions.
+Widely used in the manoeuvring community, Fujii's method [Fujii1960]_ only considers the normal load, and neglects the
+tangential component. This assumption is only applicable for small attack angles. The normal component is estimated as:
 
-The projection of the drag, lift and torque in the body frame can be written:
+.. math::
+    F_N = \dfrac{1}{2} \rho A_R V_{fRA}^2 f_{\alpha}\sin (\alpha_r)
+
+where :math:`\rho` is the water density, :math:`A_r` is the projected lateral area and :math:`f_\alpha` is:
+
+.. math::
+    f_\alpha = 6.13 \dfrac{\Lambda}{\Lambda + 2.25}
+
+where :math:`\Lambda = B_R/C_R = A_R/C_R^2` is the rudder geometric aspect ratio. :math:`B_R` and :math:`C_R` are the
+rudder span and rudder chord respectively.
+
+The rudder loads in the vessel frame are then
 
 .. math::
     \begin{cases}
-        X &=& D cos(\beta) - L sin(\beta)\\
-        Y &=& D sin(\beta) + L cos(\beta)\\
-        N &=& N
+        F_X &=& - F_N \sin(\delta_r)\\
+        F_Y &=& F_N \cos(\delta_r)\\
+        M_n &=& 0
     \end{cases}
 
-..
-    :math:`X_{Rr}` and :math:`Y_{Rr}` are respectfully the tangential and normal components of the rudder forces, in the
-    rudder reference frame. A common approximation in the literature is to consider only the normal component, the tangential
-    being small.
-
-Hull/rudder interactions
-------------------------
+Hull/propeller/rudder interactions
+----------------------------------
 
 .. _rudder_lift_correction:
-Correction on the lift
-++++++++++++++++++++++
 
-As for the propeller, the hull/rudder interaction involves a correction of the lift, due to the upstream presence of the
-hull. However, an additional lift force of equal direction is generated at the afterbody, proportional to the lift,
-leading to a total lift force :
+Correction on the loads
++++++++++++++++++++++++
 
-.. math::
-    L_{total} = L + L_{add} = (1 + a_H) L
+As for the propeller, the hull/rudder interaction involves a correction of the longitudinal due to the presence of the
+propeller [Yasukawa2015]_, but also an additional transverse load, generated at the afterbody, due to the presence of
+the hull [Brix1993]_ (eq 1.2.31).
+While the original transverse force is applied at the rudder longitudinal position :math:`x_R`, the additional load is applied
+at the rudder hydrodynamic longitudinal location, :math:`x_H`. Several empiric estimations are given for this parameter,
+a gross approximation is to take :math:`x_H = -0.45 Lpp` (when :math:`x_R = -0.5 Lpp` generally).
 
-While the original lift force is applied at the rudder longitudinal position :math:`x_R`, the additional lift is applied
-at the rudder hydrodynamic longitudinal location, :math:`x_H`.
-Several empiric estimation are given for this parameter, a gross approximation is to take : math:`x_H = -0.45 Lpp`
-(when :math:`x_R = -0.5 Lpp` generally).
-
-This means that the torque at the rudder position is
+The rudder forces and torque expressed at the rudder position are then
 
 .. math::
-    N_{total} = N + a_H (x_H - x_R) L_{add} cos(\beta)
+    \begin{cases}
+        X_r &=& (1 - t_R) F_X\\
+        Y_r &=& (1 + a_H) F_Y\\
+        N_r &=& M_n + a_H(x_H - x_R) F_Y
+    \end{cases}
 
 Wake fraction
 +++++++++++++
@@ -200,7 +227,7 @@ the straighten rudder drift angle:
 They pointed out that the two constants :math:`\gamma_R` and :math:`l'_R` might differ for port and starboard rudders.
 
 Sutulo's model
-++++++++++++
+++++++++++++++
 
 Sutulo extended Inoue's model in the four quadrants of operation, and applied the flow straightening factor to the rudder
 transverse velocity.
@@ -230,6 +257,7 @@ and :math:`K2 = 0.5`, :math:`K3 = 0.45` (as in Inoue's model).
 References
 ----------
 .. [Brix1993] Brix, J. (1993). Manoeuvring technical manual. Hamburg, Germany: Seehafen Verlag.
+.. [Fujii1960] Fujii, H., 1960. Experimental researches on rudder performance (1) (in Japanese). J. Zosen Kiokai 107, 105–111.
 .. [Kose1982] Kose, K. (1982). On a new mathematical model of maneuvering motions of a ship and its applications. International Shipbuilding Progress, 29(336), 205-220.
 .. [Molland1995a] Molland, A. F., & Turnock, S. R. (1995). Wind tunnel tests on the effect of a ship hull on rudder-propeller performance at different angles of drift.
 .. [Molland1995b] Molland, A. F., Turnock, S. R., & Smithwick, J. E. T. (1995). Wind tunnel tests on the influence of propeller loading and the effect of a ship hull on skeg-rudder performance.
