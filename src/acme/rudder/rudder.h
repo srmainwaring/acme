@@ -9,5 +9,6 @@
 #include "SimpleRudderModel.h"
 #include "FlapRudderModel.h"
 #include "FujiiRudderModel.h"
+#include "BrixRudderModel.h"
 
 #endif //ACME_RUDDER_H

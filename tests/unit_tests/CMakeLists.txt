@@ -5,6 +5,7 @@ set(UNIT_TESTS
         test_acme_CPP
         test_acme_simpleRudder
         test_acme_FlapRudder
+        test_acme_BrixRudder
         )
 
 foreach (test ${UNIT_TESTS})

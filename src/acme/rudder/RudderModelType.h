@@ -9,7 +9,9 @@ namespace acme {
 
   enum RudderModelType {
     E_SIMPLE_RUDDER,
-    E_FLAP_RUDDER
+    E_FLAP_RUDDER,
+    E_FUJII_RUDDER,
+    E_BRIX_RUDDER
   };
 
 }  // end namespace acme

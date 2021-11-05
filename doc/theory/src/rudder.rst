@@ -75,6 +75,15 @@ Brix' estimation formulas
 -------------------------
 
 Brix [Brix1993]_ (eqs 1.2.1 to 1.2.11) gave estimations for the drag, lift and stock moment coefficients, for small attack angles.
+Additional parameters are required:
+
+- :math:`d` : the longitudinal distance from the rudder's nose to its stock, in meters, positive;
+- :math:`C_f` : the rudder frictional resistance coefficient which can be computed from the ITTC57 formula:
+
+.. math::
+    C_f = \dfrac{0.075}{(log_{10}Rn - 2)^2}`
+
+- :math:`C_q` : a resistance coefficient :math:`C_q \approx 1`, according to Brix, for rudders with sharp upper and lower edges. A lower value is expected for rudders with rounded edges (difficult in practice)
 
 .. math::
     \begin{cases}
@@ -85,7 +94,7 @@ Brix [Brix1993]_ (eqs 1.2.1 to 1.2.11) gave estimations for the drag, lift and s
 
 .. math::
     \begin{cases}
-        C_d &=& C_{d1} + C_{d2}\\
+        C_d &=& -(C_{d1} + C_{d2})\\
         C_l &=& C_{l1} + C_{l2}\\
         C_{qr} &=& C_{qn} + \dfrac{d}{c} (C_l \cos(\alpha_r) + C_d \sin(\alpha_r))\\
         C_{qn} &=& -(C_{l1}\cos(\alpha_r) + C_{d1} \sin(\alpha_r))\left(0.47 - \dfrac{\Lambda+2}{4(\Lambda+1)}\right)\\
@@ -96,11 +105,13 @@ Brix [Brix1993]_ (eqs 1.2.1 to 1.2.11) gave estimations for the drag, lift and s
     \begin{cases}
         C_{d1} &=& 1.1 \dfrac{C_l^2}{\pi \Lambda}\\
         C_{d2} &=& C_q |\sin(\alpha_r)|^3 + C_{d0}\\
+        C_{d0} &=& 2.5 C_f\\
         C_{l1} &=& \dfrac{2\pi \Lambda (\Lambda+1}{(\Lambda + 2)^2} \sin(\alpha_r)\\
         C_{l2} &=& C_q \sin(\alpha_r) |\sin(\alpha_r)| \cos(\alpha)
     \end{cases}
 
-with :math:`C_q ~ 1` and :math:`C_{d0} = 2.5 C_f`, :math:`C_f = \dfrac{0.075}{(log_{10}Rn - 2)^2}`
+where :math:`\Lambda = \dfrac{b}{c} = \dfrac{A_r}{c^2}` is the rudder geometric aspect ratio, with :math:`b` and :math:`c`
+the rudder span and chord respectively.
 
 Fujii's estimation formula
 --------------------------
