@@ -58,9 +58,7 @@ The projection from the rudder frame to the vessel frame is
 Drag-Lift model
 ---------------
 
-A general procedure to establish the rudder loads is to compute numerically, using CFD, the drag and lift loads along
-with the torque at the rudder stock, and extract the non dimensional coefficients
-:math:`(C_d(\alpha_r), C_l(\alpha_r), C_n(\alpha_r))` function of the attack angle.
+The drag, lift and torque at the rudder stock can be expressed as function of the attack angle:
 
 .. math::
     \begin{cases}
@@ -70,6 +68,39 @@ with the torque at the rudder stock, and extract the non dimensional coefficient
     \end{cases}
 
 where :math:`\rho` is the water density, :math:`A_r` is the projected lateral area and :math:`c` is the rudder chord.
+
+:math:`(C_d(\alpha_r), C_l(\alpha_r), C_n(\alpha_r))` can be obtained via CFD computations.
+
+Brix' estimation formulas
+-------------------------
+
+Brix [Brix1993]_ (eqs 1.2.1 to 1.2.11) gave estimations for the drag, lift and stock moment coefficients, for small attack angles.
+
+.. math::
+    \begin{cases}
+        F_D &=& \dfrac{1}{2} \rho C_d(\alpha_r) A_r V_{fRA}^2\\
+        F_L &=& \dfrac{1}{2} \rho C_l(\alpha_r) A_r V_{fRA}^2\\
+        M_n &=& \dfrac{1}{2} \rho C_{qr}(\alpha_r) A_r c V_{fRA}^2\\
+    \end{cases}
+
+.. math::
+    \begin{cases}
+        C_d &=& C_{d1} + C_{d2}\\
+        C_l &=& C_{l1} + C_{l2}\\
+        C_{qr} &=& C_{qn} + \dfrac{d}{c} (C_l \cos(\alpha_r) + C_d \sin(\alpha_r))\\
+        C_{qn} &=& -(C_{l1}\cos(\alpha_r) + C_{d1} \sin(\alpha_r))\left(0.47 - \dfrac{\Lambda+2}{4(\Lambda+1)}\right)\\
+                && - 0.75 (C_{l2}\cos(\alpha_r) + C_{d2} \sin(\alpha_r))
+    \end{cases}
+
+.. math::
+    \begin{cases}
+        C_{d1} &=& 1.1 \dfrac{C_l^2}{\pi \Lambda}\\
+        C_{d2} &=& C_q |\sin(\alpha_r)|^3 + C_{d0}\\
+        C_{l1} &=& \dfrac{2\pi \Lambda (\Lambda+1}{(\Lambda + 2)^2} \sin(\alpha_r)\\
+        C_{l2} &=& C_q \sin(\alpha_r) |\sin(\alpha_r)| \cos(\alpha)
+    \end{cases}
+
+with :math:`C_q ~ 1` and :math:`C_{d0} = 2.5 C_f`, :math:`C_f = \dfrac{0.075}{(log_{10}Rn - 2)^2}`
 
 Fujii's estimation formula
 --------------------------
@@ -120,6 +151,8 @@ The rudder forces and torque expressed at the rudder position are then
         Y_r &=& (1 + a_H) F_Y\\
         N_r &=& M_n + a_H(x_H - x_R) F_Y
     \end{cases}
+
+with :math:`t_R` the steering resistance deduction factor and :math:`a_H` the rudder force increase factor.
 
 Wake fraction
 +++++++++++++
