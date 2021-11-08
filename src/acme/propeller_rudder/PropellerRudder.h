@@ -73,7 +73,7 @@ namespace acme {
 
     virtual double GetPropellerRudderMz() const = 0;
 
-    virtual void DefineLogMessages(hermes::Message* propeller_message, hermes::Message* rudder_message) = 0;
+    virtual void DefineLogMessages(hermes::Message *propeller_message, hermes::Message *rudder_message) = 0;
 
    protected:
 
@@ -101,7 +101,8 @@ namespace acme {
     void
     Compute(const double &water_density, const double &u_NWU_propeller_ms, const double &v_NWU_propeller_ms,
             const double &u_NWU_ship_ms, const double &v_NWU_ship_ms, const double &r_rads, const double &x_pr_m,
-            const double &x_gr_m, const double &rpm, const double &pitch_ratio, const double &rudder_angle_deg) const override;
+            const double &x_gr_m, const double &rpm, const double &pitch_ratio,
+            const double &rudder_angle_deg) const override;
 
     double GetPropellerThrust() const override;
 
@@ -123,7 +124,7 @@ namespace acme {
 
     double GetPropellerRudderMz() const override;
 
-    void DefineLogMessages(hermes::Message* propeller_message, hermes::Message* rudder_message) override;
+    void DefineLogMessages(hermes::Message *propeller_message, hermes::Message *rudder_message) override;
 
    private:
     std::unique_ptr<Propeller> m_propeller;

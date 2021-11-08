@@ -7,10 +7,7 @@
 #include <iostream>
 #include <vector>
 #include <nlohmann/json.hpp>
-#include <MathUtils/Vector3d.h>
-#include <MathUtils/Angles.h>
 #include "MathUtils/Unit.h"
-#include <fstream>
 
 using json = nlohmann::json;
 

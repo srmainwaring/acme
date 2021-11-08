@@ -8,30 +8,7 @@
 
 using namespace acme;
 
-class TestBrixRudder : public BrixRudderModel {
-
- public:
-
-  TestBrixRudder(const RudderParams &params, double d, double Cf=0);
-
-  void GetClCdCn(const double &attack_angle_rad,
-                 const double &rudder_angle_rad,
-                 double &cl,
-                 double &cd,
-                 double &cn) const override;
-
-};
-
-TestBrixRudder::TestBrixRudder(const RudderParams &params, double d, double Cf) : BrixRudderModel(params, d, Cf) {
-
-}
-
-void TestBrixRudder::GetClCdCn(const double &attack_angle_rad, const double &rudder_angle_rad, double &cl, double &cd,
-                               double &cn) const {
-  BrixRudderModel::GetClCdCn(attack_angle_rad, rudder_angle_rad, cl, cd, cn);
-}
-
-void test_coefficients(double alpha, TestBrixRudder& rudder, double d, double Cf){
+void test_coefficients(double alpha, BrixRudderModel& rudder, double d, double Cf){
 
   auto Ar = rudder.GetParameters().m_lateral_area_m2;
   auto c = rudder.GetParameters().m_chord_m;
@@ -48,7 +25,7 @@ void test_coefficients(double alpha, TestBrixRudder& rudder, double d, double Cf
   // Drag coefficient
   auto Cd1 = 1.1 * cl * cl / (MU_PI * aspect_ratio);
   auto Cd2 = pow(abs(sa),3) + 2.5 * Cf;
-  auto cd = Cd1 + Cd2;
+  auto cd = -(Cd1 + Cd2);
 
   // Torque coefficient at rudder nose
   auto Cqn = -(Cl1*ca + Cd1*sa) * (0.47 - (aspect_ratio+2)/(4*(aspect_ratio+1)))
@@ -78,7 +55,7 @@ TEST(BrixRudder, coefficients) {
   // Frictional coefficient from ITTC57
   auto Cf = 0.075 / pow(log10(Re - 2), 2);
 
-  auto rudder = TestBrixRudder(params, d, Cf);
+  auto rudder = BrixRudderModel(params, d, Cf);
 //  rudder.SetITTC57FrictionalResistanceCoefficient(U_ms, mathutils::MS);
   rudder.Initialize();
 

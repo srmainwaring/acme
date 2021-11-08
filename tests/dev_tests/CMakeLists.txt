@@ -15,3 +15,12 @@ set_target_properties(test_propeller_rudder PROPERTIES
         RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 
+
+add_executable(test_rudders test_rudders.cpp)
+
+target_link_libraries(test_rudders acme)
+
+set_target_properties(test_rudders PROPERTIES
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
+

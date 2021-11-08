@@ -40,14 +40,15 @@ namespace acme {
                                                   mathutils::SPEED_UNIT unit,
                                                   double nu_water = 1.15E-6);
 
-   protected:
-
-    void ComputeLoads(const double &water_density) const override;
-
     virtual void GetClCdCn(const double &attack_angle_rad,
+                           const double &rudder_angle_rad,
                            double &cl,
                            double &cd,
                            double &cn) const;
+
+   protected:
+
+    void ComputeLoads(const double &water_density) const override;
 
     double m_d; // Longitudinal distance from the rudder nose to its stock
     double m_Cf; // ITTC57 frictional resistance coefficient

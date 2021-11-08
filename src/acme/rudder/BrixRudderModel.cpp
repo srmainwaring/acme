@@ -31,7 +31,7 @@ namespace acme {
 
     // Get coefficients
     double cl, cd, cn;
-    GetClCdCn(c_alpha_R_rad, cl, cd, cn);
+    GetClCdCn(c_alpha_R_rad, 0., cl, cd, cn);
 
     // Forces in flow frame
     double q = 0.5 * water_density * (c_uRA * c_uRA + c_vRA * c_vRA); // stagnation pressure at rudder position
@@ -50,6 +50,7 @@ namespace acme {
 
   void
   BrixRudderModel::GetClCdCn(const double &attack_angle_rad,
+                             const double &rudder_angle_rad,
                              double &cl,
                              double &cd,
                              double &cn) const {
