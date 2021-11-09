@@ -100,8 +100,6 @@ namespace acme {
      *
      */
 
-    std::cout << m_temp_perf_data_json_string << std::endl;
-
     auto jnode = json::parse(m_temp_perf_data_json_string);
     m_temp_perf_data_json_string.clear();
 

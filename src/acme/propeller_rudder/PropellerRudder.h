@@ -195,6 +195,16 @@ namespace acme {
                                                                            rudder_params,
                                                                            rudder_perf_data_string);
             break;
+          case E_FUJII_RUDDER:
+            std::cerr<<"Fujii rudder model not available for PropellerRudder model"<<std::endl;
+            exit(1);
+            break;
+          case E_BRIX_RUDDER:
+            pr = std::make_shared<PropellerRudder<FPP1Q, BrixRudderModel>>(prop_params,
+                                                                           prop_perf_data_string,
+                                                                           rudder_params,
+                                                                           rudder_perf_data_string);
+            break;
         }
         break;
       case E_FPP4Q:
@@ -207,6 +217,16 @@ namespace acme {
             break;
           case E_FLAP_RUDDER:
             pr = std::make_shared<PropellerRudder<FPP4Q, FlapRudderModel>>(prop_params,
+                                                                           prop_perf_data_string,
+                                                                           rudder_params,
+                                                                           rudder_perf_data_string);
+            break;
+          case E_FUJII_RUDDER:
+            std::cerr<<"Fujii rudder model not available for PropellerRudder model"<<std::endl;
+            exit(1);
+            break;
+          case E_BRIX_RUDDER:
+            pr = std::make_shared<PropellerRudder<FPP4Q, BrixRudderModel>>(prop_params,
                                                                            prop_perf_data_string,
                                                                            rudder_params,
                                                                            rudder_perf_data_string);

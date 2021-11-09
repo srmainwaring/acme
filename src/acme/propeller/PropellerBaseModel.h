@@ -30,21 +30,13 @@ namespace acme {
 
     double m_thrust_coefficient_correction = 0.;
     double m_torque_coefficient_correction = 0.;
-
-
-    // FIXME: est-ce que ces constructeurs sont rellement utiles ??? On utilise une struct comme une struct qui stack
-    //  des donnees publiques...
-    PropellerParams();
-    PropellerParams( double diameter_m, double hull_wake_fraction_0, double thrust_deduction_factor_0,
-                        SCREW_DIRECTION sd);
-
   };
 
 
   class PropellerBaseModel {
 
    public:
-    PropellerBaseModel(const PropellerParams params,
+    PropellerBaseModel(const PropellerParams &params,
                        const std::string &perf_data_json_string,
                        PropellerModelType type);
 

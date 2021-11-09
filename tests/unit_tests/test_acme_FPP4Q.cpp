@@ -22,7 +22,11 @@ TEST(TestFPP4Q, without_interactions) {
       "cq": [-0.018609981000000005,0.055124843060058874,0.10925670286110463,0.1255048384078987,0.05556630922628392,0.015411367752487179,-0.10401960640789869,-0.12289300851577142,-0.0810090123841631,-0.018609980999999987]
     })";
 
-  PropellerParams params = {2., 0., 0., SCREW_DIRECTION::RIGHT_HANDED};
+  PropellerParams params;
+  params.m_diameter_m = 2.;
+  params.m_hull_wake_fraction_0 = 0.;
+  params.m_thrust_deduction_factor_0 = 0.;
+  params.m_screw_direction = acme::RIGHT_HANDED;
   FPP4Q propeller(params, open_water_data_table);
   propeller.Initialize();
 
@@ -111,7 +115,11 @@ TEST(TestFPP4Q, with_interactions) {
       "cq": [-0.018609981000000005,0.055124843060058874,0.10925670286110463,0.1255048384078987,0.05556630922628392,0.015411367752487179,-0.10401960640789869,-0.12289300851577142,-0.0810090123841631,-0.018609980999999987]
     })";
 
-  PropellerParams params = {2., 0.2, 0.25, SCREW_DIRECTION::RIGHT_HANDED};
+  PropellerParams params;
+  params.m_diameter_m = 2.;
+  params.m_hull_wake_fraction_0 = 0.2;
+  params.m_thrust_deduction_factor_0 = 0.25;
+  params.m_screw_direction = acme::RIGHT_HANDED;
   FPP4Q propeller(params, open_water_data_table);
   propeller.Initialize();
 

@@ -8,7 +8,7 @@
 
 namespace acme {
 
-  PropellerBaseModel::PropellerBaseModel(const PropellerParams params,
+  PropellerBaseModel::PropellerBaseModel(const PropellerParams &params,
                                          const std::string &perf_data_json_string,
                                          PropellerModelType type) :
       m_params(params),
@@ -92,18 +92,4 @@ namespace acme {
 
   }
 
-
-  PropellerParams::PropellerParams(double diameter_m, double hull_wake_fraction_0,
-                                   double thrust_deduction_factor_0, SCREW_DIRECTION sd) :
-      m_diameter_m(diameter_m), m_hull_wake_fraction_0(hull_wake_fraction_0),
-      m_thrust_deduction_factor_0(thrust_deduction_factor_0),
-      m_screw_direction(sd) {
-
-  }
-
-  PropellerParams::PropellerParams() : m_diameter_m(0.), m_hull_wake_fraction_0(0.),
-                                       m_thrust_deduction_factor_0(0.),
-                                       m_screw_direction(RIGHT_HANDED) {
-
-  }
 }  // end namespace acme
