@@ -20,7 +20,8 @@ namespace acme {
   class SimpleRudderModel: public RudderBaseModel {
 
    public:
-    SimpleRudderModel(const RudderParams params, const std::string &perf_data_json_string);
+    SimpleRudderModel(const RudderParams &params,
+                      const std::string &perf_data_json_string);
 
     void Initialize() override;
 

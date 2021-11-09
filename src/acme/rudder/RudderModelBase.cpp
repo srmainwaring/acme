@@ -12,7 +12,17 @@
 
 namespace acme {
 
-  RudderBaseModel::RudderBaseModel(const RudderParams params) :
+  double compute_ITTC57_frictional_resistance_coefficient(double rudder_chord_m,
+                                                          double mean_velocity_ms,
+                                                          double nu_water) {
+    assert(mean_velocity_ms > 1E-1);
+    // Reynolds number
+    auto Re = mean_velocity_ms * rudder_chord_m / nu_water;
+    // Frictional coefficient from ITTC57
+    return 0.075 / pow(log10(Re - 2), 2);
+  }
+
+  RudderBaseModel::RudderBaseModel(const RudderParams &params) :
       m_params(params),
       m_type(RudderModelType::E_SIMPLE_RUDDER),
       m_is_initialized(false),
@@ -119,5 +129,4 @@ namespace acme {
       kappa = av + bv * abs(beta);
     return kappa;
   }
-
 }  // end namespace acme

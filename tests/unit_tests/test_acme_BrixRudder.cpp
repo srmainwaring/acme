@@ -48,14 +48,12 @@ TEST(BrixRudder, coefficients) {
   params.m_lateral_area_m2 = 4;
   params.m_chord_m = 1;
   auto d = 0.5; // distance nose to rudder stock
-
-  double U_ms = 5;
-  // Reynolds number
-  auto Re = U_ms * params.m_chord_m / 1.15E-6;
+  params.m_d = d;
   // Frictional coefficient from ITTC57
-  auto Cf = 0.075 / pow(log10(Re - 2), 2);
+  params.m_Cf = compute_ITTC57_frictional_resistance_coefficient(params.m_chord_m, 5);
+  auto Cf = params.m_Cf;
 
-  auto rudder = BrixRudderModel(params, d, Cf);
+  auto rudder = BrixRudderModel(params);
 //  rudder.SetITTC57FrictionalResistanceCoefficient(U_ms, mathutils::MS);
   rudder.Initialize();
 

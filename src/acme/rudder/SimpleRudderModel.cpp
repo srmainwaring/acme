@@ -13,7 +13,8 @@ using json = nlohmann::json;
 
 namespace acme {
 
-  SimpleRudderModel::SimpleRudderModel(const RudderParams params, const std::string &perf_data_json_string) :
+  SimpleRudderModel::SimpleRudderModel(const RudderParams &params,
+                                       const std::string &perf_data_json_string) :
   RudderBaseModel(params),
   m_temp_perf_data_json_string(perf_data_json_string),
   m_cl_cd_cn_coeffs(mathutils::LINEAR){

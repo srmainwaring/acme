@@ -7,24 +7,12 @@
 namespace acme {
 
   BrixRudderModel::BrixRudderModel(const RudderParams &params,
-                                   double distanceNoseToStock_m,
-                                   double Cf,
-                                   double Cq) :
-      RudderBaseModel(params), m_d(distanceNoseToStock_m), m_Cf(Cf), m_Cq(Cq) {
+                    const std::string &rudder_perf_data_json_string) :
+      RudderBaseModel(params) {
   }
 
   void BrixRudderModel::Initialize() {
     m_is_initialized = true;
-  }
-
-  void
-  BrixRudderModel::SetITTC57FrictionalResistanceCoefficient(double mean_velocity, mathutils::SPEED_UNIT unit, double nu_water) {
-    assert(mean_velocity > 1E-1);
-    double U_ms = mathutils::convert_velocity_unit(mean_velocity, unit, mathutils::MS);
-    // Reynolds number
-    auto Re = U_ms * m_params.m_chord_m / nu_water;
-    // Frictional coefficient from ITTC57
-    m_Cf = 0.075 / pow(log10(Re - 2), 2);
   }
 
   void BrixRudderModel::ComputeLoads(const double &water_density) const {
@@ -62,12 +50,12 @@ namespace acme {
     
     // Lift coefficient
     auto Cl1 = 2 * MU_PI * aspect_ratio * (aspect_ratio + 1) / pow(aspect_ratio+2, 2) * sa;
-    auto Cl2 = m_Cq * sa * abs(sa) * ca;
+    auto Cl2 = m_params.m_Cq * sa * abs(sa) * ca;
     cl = Cl1 + Cl2;
 
     // Drag coefficient
     auto Cd1 = 1.1 * cl * cl / (MU_PI * aspect_ratio);
-    auto Cd2 = m_Cq * pow(abs(sa), 3) + 2.5 * m_Cf;
+    auto Cd2 = m_params.m_Cq * pow(abs(sa), 3) + 2.5 * m_params.m_Cf;
     cd = - (Cd1 + Cd2);
 
     // Torque coefficient at rudder nose
@@ -75,7 +63,7 @@ namespace acme {
         - 0.75 *(Cl2*ca + Cd2*sa);
 
     // Torque coefficient at rudder stock
-    cn = Cqn + m_d/m_params.m_chord_m * (cl * ca + cd * sa);
+    cn = Cqn + m_params.m_d/m_params.m_chord_m * (cl * ca + cd * sa);
 
   }
 } // end namespace acme

@@ -12,21 +12,15 @@ using json = nlohmann::json;
 
 void comp_Technip(){
 
-
   auto params = RudderParams();
   params.m_lateral_area_m2 = 15.061;
   params.m_chord_m = 3.3;
   params.m_height_m = 4.600;
   params.m_flap_slope = 0.8;
-  auto d = 1.231; // distance nose to rudder stock
+  params.m_d = 1.231; // distance nose to rudder stock
+  params.m_Cf = compute_ITTC57_frictional_resistance_coefficient(params.m_chord_m, 10.);
 
-  double U_ms = 10;
-  // Reynolds number
-  auto Re = U_ms * params.m_chord_m / 1.15E-6;
-  // Frictional coefficient from ITTC57
-  auto Cf = 0.075 / pow(log10(Re - 2), 2);
-
-  auto brix_rudder = BrixRudderModel(params, d, Cf);
+  auto brix_rudder = BrixRudderModel(params);
 //  rudder.SetITTC57FrictionalResistanceCoefficient(U_ms, mathutils::MS);
   brix_rudder.Initialize();
 
@@ -55,21 +49,15 @@ void comp_Technip(){
 
 void comp_TARA(){
 
-
   auto params = RudderParams();
   params.m_lateral_area_m2 = 36;
   params.m_chord_m = 5.2;
 //  params.m_height_m = 4.600;
 //  params.m_flap_slope = 0.8;
-  auto d = 2.6; // distance nose to rudder stock
+  params.m_d = 2.6; // distance nose to rudder stock
+  params.m_Cf = compute_ITTC57_frictional_resistance_coefficient(params.m_chord_m, 10.);
 
-  double U_ms = 8;
-  // Reynolds number
-  auto Re = U_ms * params.m_chord_m / 1.15E-6;
-  // Frictional coefficient from ITTC57
-  auto Cf = 0.075 / pow(log10(Re - 2), 2);
-
-  auto brix_rudder = BrixRudderModel(params, d, Cf);
+  auto brix_rudder = BrixRudderModel(params);
 //  rudder.SetITTC57FrictionalResistanceCoefficient(U_ms, mathutils::MS);
   brix_rudder.Initialize();
 
@@ -100,25 +88,17 @@ void comp_TARA(){
 
 void comp_Total(){
 
-
   auto params = RudderParams();
   params.m_lateral_area_m2 = 1.848;
   params.m_chord_m = 1.1;
   params.m_height_m = 1.68;
 //  params.m_flap_slope = 0.8;
-  auto d = 0.5; // distance nose to rudder stock
+  params.m_d = 0.5; // distance nose to rudder stock
+  params.m_Cf = compute_ITTC57_frictional_resistance_coefficient(params.m_chord_m, 10.);
 
-  double U_ms = 2;
-  // Reynolds number
-  auto Re = U_ms * params.m_chord_m / 1.15E-6;
-  // Frictional coefficient from ITTC57
-  auto Cf = 0.075 / pow(log10(Re - 2), 2);
-
-  auto brix_rudder = BrixRudderModel(params, d, Cf);
+  auto brix_rudder = BrixRudderModel(params);
 //  rudder.SetITTC57FrictionalResistanceCoefficient(U_ms, mathutils::MS);
   brix_rudder.Initialize();
-
-
 
   auto angles = mathutils::linspace(-25, 15, 41);
 

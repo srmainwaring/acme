@@ -19,6 +19,9 @@ namespace acme {
     double m_chord_m; // Rudder chord length at its half height
     double m_height_m;
 
+    // Hull/propeller/rudder interaction coefficients
+    bool m_has_hull_influence = true;
+    bool m_has_hull_influence_transverse_velocity = false;
     double m_tR = 0;  // steering resistance deduction factor
     double m_aH = 0.; // correction factor for the rudder lift force (in the vessel frame)
     double m_xR = 0.; // longitudinal position of the rudder, relatively to the ship COG (approx -0.5 Lpp)
@@ -28,16 +31,26 @@ namespace acme {
     double m_hull_wake_fraction_0 = 0.; // Straight-run hull wake fraction
 
     // Optional
-    bool m_has_hull_influence = true;
-    bool m_has_hull_influence_transverse_velocity = false;
+
+    // For Flap rudder only
     double m_flap_slope = 0.; // only used for a flap rudder type
+
+    // For Brix model only
+    double m_d; // Longitudinal distance from the rudder nose to its stock (0.25-0.5 x chord)
+    double m_Cf=0.; // ITTC57 frictional resistance coefficient, can be computed with function compute_ITTC57_frictional_resistance_coefficient()
+    double m_Cq=1.; // Rudder resistance coefficient, approximated to 1 by Brix for rudder with sharp upper and lower edges. Smaller values for rounded edges (see above 1.2.11)
+
   };
+
+  double compute_ITTC57_frictional_resistance_coefficient(double rudder_chord_m,
+                                                          double mean_velocity_ms,
+                                                          double nu_water = 1.15E-6);
 
 
   class RudderBaseModel {
 
    public:
-    RudderBaseModel(const RudderParams params);
+    explicit RudderBaseModel(const RudderParams &params);
 
     virtual void Initialize() = 0;
 

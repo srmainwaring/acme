@@ -18,6 +18,7 @@ namespace acme {
    * Requires :
    * - the longitudinal distance from the nose to the rudder's stock
    * - the rudder frictional resistance coefficient Cf, which can be computed using the ITTC57 formula
+   * - the rudder resistance coefficient Cq, approximated to 1 by Brix for rudder with sharp upper and lower edges. Smaller values for rounded edges (see above 1.2.11)
    */
   class BrixRudderModel : public RudderBaseModel {
 
@@ -26,19 +27,11 @@ namespace acme {
 
     /// Brix rudder model, based on estimations for the drag, lift and torque at rudder's stock
     /// \param params rudder parameters
-    /// \param distanceNoseToStock_m longitudinal from the rudder's nose to the rudder's stock, in m, positive
-    /// \param Cf frictional resistance coefficient, can be computed using ITTC57 formula, see SetITTC57FrictionalResistanceCoefficient method
-    /// \param Cq rudder resistance coefficient, approximated to 1 by Brix for rudder with sharp upper and lower edges. Smaller values for rounded edges (see above 1.2.11)
+    /// \param rudder_perf_data_json_string not used, only defined to be used with the PropellerRudderModel class...
     explicit BrixRudderModel(const RudderParams &params,
-                             double distanceNoseToStock_m,
-                             double Cf=0.,
-                             double Cq=1.);
+                             const std::string &rudder_perf_data_json_string="");
 
     void Initialize() override;
-
-    void SetITTC57FrictionalResistanceCoefficient(double mean_velocity,
-                                                  mathutils::SPEED_UNIT unit,
-                                                  double nu_water = 1.15E-6);
 
     virtual void GetClCdCn(const double &attack_angle_rad,
                            const double &rudder_angle_rad,
@@ -49,10 +42,6 @@ namespace acme {
    protected:
 
     void ComputeLoads(const double &water_density) const override;
-
-    double m_d; // Longitudinal distance from the rudder nose to its stock
-    double m_Cf; // ITTC57 frictional resistance coefficient
-    double m_Cq; // Rudder resistance coefficient
 
   };
 
