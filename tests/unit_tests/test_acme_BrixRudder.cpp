@@ -48,7 +48,7 @@ TEST(BrixRudder, coefficients) {
   params.m_lateral_area_m2 = 4;
   params.m_chord_m = 1;
   auto d = 0.5; // distance nose to rudder stock
-  params.m_d = d;
+  params.m_distance_nose_stock_m = d;
   // Frictional coefficient from ITTC57
   params.m_Cf = compute_ITTC57_frictional_resistance_coefficient(params.m_chord_m, 5);
   auto Cf = params.m_Cf;

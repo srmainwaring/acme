@@ -63,7 +63,7 @@ namespace acme {
         - 0.75 *(Cl2*ca + Cd2*sa);
 
     // Torque coefficient at rudder stock
-    cn = Cqn + m_params.m_d/m_params.m_chord_m * (cl * ca + cd * sa);
+    cn = Cqn + m_params.m_distance_nose_stock_m / m_params.m_chord_m * (cl * ca + cd * sa);
 
   }
 } // end namespace acme

@@ -17,7 +17,7 @@ void comp_Technip(){
   params.m_chord_m = 3.3;
   params.m_height_m = 4.600;
   params.m_flap_slope = 0.8;
-  params.m_d = 1.231; // distance nose to rudder stock
+  params.m_distance_nose_stock_m = 1.231; // distance nose to rudder stock
   params.m_Cf = compute_ITTC57_frictional_resistance_coefficient(params.m_chord_m, 10.);
 
   auto brix_rudder = BrixRudderModel(params);
@@ -54,7 +54,7 @@ void comp_TARA(){
   params.m_chord_m = 5.2;
 //  params.m_height_m = 4.600;
 //  params.m_flap_slope = 0.8;
-  params.m_d = 2.6; // distance nose to rudder stock
+  params.m_distance_nose_stock_m = 2.6; // distance nose to rudder stock
   params.m_Cf = compute_ITTC57_frictional_resistance_coefficient(params.m_chord_m, 10.);
 
   auto brix_rudder = BrixRudderModel(params);
@@ -93,7 +93,7 @@ void comp_Total(){
   params.m_chord_m = 1.1;
   params.m_height_m = 1.68;
 //  params.m_flap_slope = 0.8;
-  params.m_d = 0.5; // distance nose to rudder stock
+  params.m_distance_nose_stock_m = 0.5; // distance nose to rudder stock
   params.m_Cf = compute_ITTC57_frictional_resistance_coefficient(params.m_chord_m, 10.);
 
   auto brix_rudder = BrixRudderModel(params);

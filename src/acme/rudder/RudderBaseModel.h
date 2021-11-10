@@ -36,7 +36,7 @@ namespace acme {
     double m_flap_slope = 0.; // only used for a flap rudder type
 
     // For Brix model only
-    double m_d; // Longitudinal distance from the rudder nose to its stock (0.25-0.5 x chord)
+    double m_distance_nose_stock_m; // Longitudinal distance from the rudder nose to its stock (0.25-0.5 x chord)
     double m_Cf=0.; // ITTC57 frictional resistance coefficient, can be computed with function compute_ITTC57_frictional_resistance_coefficient()
     double m_Cq=1.; // Rudder resistance coefficient, approximated to 1 by Brix for rudder with sharp upper and lower edges. Smaller values for rounded edges (see above 1.2.11)
 
