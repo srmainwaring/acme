@@ -15,7 +15,7 @@ The conventions applying to the propeller model are :
 According to these conventions, the propeller frame, in which the thrust and torque are expressed, is represented in the :any:`following figure <fig_propu_frame>`.
 
 .. _fig_propu_frame:
-.. figure:: ../_static/propu_frame.png
+.. figure:: figures/propu_frame.png
     :align: center
     :alt: propu_frame
 
@@ -66,7 +66,7 @@ the following table. Those quadrants are described in a macro fashion, using the
     =========== =========== =========== ===========
 
 .. _fig_quadrants:
-.. figure:: ../_static/4quadrants.png
+.. figure:: figures/4quadrants.png
     :align: center
     :alt: 4quadrants
 
@@ -109,7 +109,7 @@ For both cases, the propeller axis is vertical, in front of the figure. The blad
 The advance angles are drawn for a first quadrant (ahead) condition. We can observe that, while the thrust is positive for both cases, the torque is positive for right-handed propeller and negative for left-handed one.
 
 .. _fig_advance_angle:
-..  figure:: ../_static/FPP.png
+..  figure:: figures/FPP.png
     :align: center
     :alt: advance angle and quadrants relations
 
@@ -218,7 +218,7 @@ This means that technically, Open Water coefficients given for positive and nega
 However, the Open Water coefficients presents a discontinuity for zero advance ratio, but it is then possible to transform these coefficients to four quadrant coefficient in the first and last quadrant, as seen above.
 
 .. _fig_CPP:
-..  figure:: ../_static/CPP.png
+..  figure:: figures/CPP.png
     :align: center
     :alt: CPP
 

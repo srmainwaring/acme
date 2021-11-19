@@ -24,13 +24,16 @@ Ogawa [Ogawa1980]_, or Pershitz [Pershitz1983]_ for low speed manoeuvers.
 The propeller influence on the rudder is mainly due to the propeller slipstream washing the rudder.
 Generally the interaction models are based on the “load separation principle” under the following assumptions:
 
- - the whole rudder lateral projected area is decomposed into the area washed by the slipstream :math:`A_{RP}` and the remaining area :math:`A_{RA}`: :math:`A_R = A_{RP} + A_{RA}`. It is possible to approximate the area washed by the slipstream by : :math:`A_{RP} = \dfrac{h_{RP}}{h_R} A_R = 2\dfrac{r_{RP}}{h_R} A_R`
- - the rudder speed with respect to water and its attack angle are :math:`V_{RP}` and :math:`\alpha_{RP}` inside the slipstream and :math:`V_{RA}̀` and :math:`\alpha_{RA}` outside (based on :math:`u_{RA}` and :math:`v_{RA}` , see section Hull-rudder interaction)
+ - the whole rudder lateral projected area is decomposed into the area washed by the slipstream :math:`A_{RP}` and the
+   remaining area :math:`A_{RA}`: :math:`A_R = A_{RP} + A_{RA}`. It is possible to approximate the area washed by the
+   slipstream by : :math:`A_{RP} = \dfrac{h_{RP}}{h_R} A_R = 2\dfrac{r_{RP}}{h_R} A_R`
+ - the rudder speed with respect to water and its attack angle are :math:`V_{RP}` and :math:`\alpha_{RP}` inside the
+   slipstream and :math:`V_{RA}` and :math:`\alpha_{RA}` outside (based on :math:`u_{RA}` and :math:`v_{RA}` , see
+   section Hull-rudder interaction)
  - the rudder coefficients are the same inside and outside the slipstream
 
-
 .. _fig_prop_rudder_decomposition:
-.. figure:: ../_static/prop_rudder_decomposition.png
+.. figure:: figures/prop_rudder_decomposition.png
     :align: center
     :alt: prop_rudder_decomposition
 
@@ -42,23 +45,20 @@ The rudder generalized force can then be decomposed in
     F_{rudder} = F_{rudder}(RA) + F_{rudder}(RP)
 
 
-
-
-
 and for the different components
 
 .. math::
     \begin{cases}
-    D_{RA} &=& \dfrac{1}{2} \rho C_d(\alpha_{RA}) A_{RA} V_{RA}^2\\
-    L_{RA} &=& \dfrac{1}{2} \rho C_l(\alpha_{RA}) A_{RA} V_{RA}^2\\
-    N_{RA} &=& \dfrac{1}{2} \rho C_n(\alpha_{RA}) A_{RA} V_{RA}^2\\
+    D_{RA} = \dfrac{1}{2} \rho C_d(\alpha_{RA}) A_{RA} V_{RA}^2\\
+    L_{RA} = \dfrac{1}{2} \rho C_l(\alpha_{RA}) A_{RA} V_{RA}^2\\
+    N_{RA} = \dfrac{1}{2} \rho C_n(\alpha_{RA}) A_{RA} V_{RA}^2\\
     \end{cases}
 
 .. math::
     \begin{cases}
-    D_{RP} &=& \dfrac{1}{2} \rho C_d(\alpha_{RP}) A_{RP} V_{RP}^2\\
-    L_{RP} &=& \dfrac{1}{2} \rho C_l(\alpha_{RP}) A_{RP} V_{RP}^2\\
-    N_{RP} &=& \dfrac{1}{2} \rho C_n(\alpha_{RP}) A_{RP} V_{RP}^2\\
+    D_{RP} = \dfrac{1}{2} \rho C_d(\alpha_{RP}) A_{RP} V_{RP}^2\\
+    L_{RP} = \dfrac{1}{2} \rho C_l(\alpha_{RP}) A_{RP} V_{RP}^2\\
+    N_{RP} = \dfrac{1}{2} \rho C_n(\alpha_{RP}) A_{RP} V_{RP}^2\\
     \end{cases}
 
 where :math:`k_d` is the jet deflection reduction factor applied on the lift component in the slipstream only, and specified later.
@@ -76,7 +76,7 @@ The :any:`following figure<fig_prop_rudder_flowchart>` illustrates the relations
 
 
 .. _fig_prop_rudder_flowchart:
-.. figure:: ../_static/prop_rudder_flowchart.png
+.. figure:: figures/prop_rudder_flowchart.png
     :align: center
     :alt: prop_rudder_flowchart
 
@@ -89,7 +89,7 @@ The rudder speed with respect to water and its attack angle in the slipstream ca
 disc theory, see :any:`following figure<fig_prop_rudder_actuator_disk>`, and detailed in [Brix1993]_.
 
 .. _fig_prop_rudder_actuator_disk:
-.. figure:: ../_static/prop_rudder_actuator_disk.png
+.. figure:: figures/prop_rudder_actuator_disk.png
     :align: center
     :alt: prop_rudder_actuator_disk
 
@@ -141,7 +141,7 @@ the surrounding fluid. The slipstream radius can then be augmented by
 in the same manner, the axial velocity can be corrected by
 
 .. math::
-    u_{RP} = (u_{x} - u_{PA}) \left( \dfrac{r_{RP}}{r_{RP} + \Delta r} \rigth)^2 + u_{PA}
+    u_{RP} = (u_{x} - u_{PA})  \left(\dfrac{r_{RP}}{r_{RP} + \Delta r}\right)^2 + u_{PA}
 
 Influence of lateral variation of flow speed
 ++++++++++++++++++++++++++++++++++++++++++++
@@ -152,9 +152,9 @@ based on the transformation of the circular cross-section of the slipstream to a
 
 .. math::
     \begin{cases}
-    k_d &=& \left(\dfrac{u_{PA}}{u_{RP}}\right)^f\\
-    f &=& 2 \left(\dfrac{2}{2+d/c}\right)^8\\
-    d &=& \sqrt{\pi/4}(r+\Delta r)
+        k_d = \left(\dfrac{u_{PA}}{u_{RP}}\right)^f\\
+        f = 2 \left(\dfrac{2}{2+d/c}\right)^8\\
+        d = \sqrt{\pi/4}(r+\Delta r)
     \end{cases}
 
 

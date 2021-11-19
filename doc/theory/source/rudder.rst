@@ -19,7 +19,7 @@ velocity field :math:`V_{fR}`. The normal :math:`F_N` and tangent :math:`F_T` co
 orientation.
 
 .. _fig_rudder_frame:
-.. figure:: ../_static/rudder_frame.png
+.. figure:: figures/rudder_frame.png
     :align: center
     :alt: rudder_frame
 
@@ -35,24 +35,24 @@ The projection of the rudder loads from the inflow frame, to the vessel frame is
 
 .. math::
     \begin{cases}
-        F_X &=& F_D \cos(\beta_r) - F_L \sin(\beta_r)\\
-        F_Y &=& F_D \sin(\beta_r) + F_L \cos(\beta_r)
+        F_X = F_D \cos(\beta_r) - F_L \sin(\beta_r)\\
+        F_Y = F_D \sin(\beta_r) + F_L \cos(\beta_r)
     \end{cases}
 
 The projection from the rudder frame to the vessel frame is
 
 .. math::
     \begin{cases}
-        F_X &=& F_T \cos(\delta_r) - F_N \sin(\delta_r)\\
-        F_Y &=& F_T \sin(\delta_r) + F_N \cos(\delta_r)
+        F_X = F_T \cos(\delta_r) - F_N \sin(\delta_r)\\
+        F_Y = F_T \sin(\delta_r) + F_N \cos(\delta_r)
     \end{cases}
 
 ..
     And the projection from the rudder frame to the inflow frame is
     .. math::
         \begin{cases}
-            F_D &=& T \cos(\alpha_r) + F_N \sin(\alpha_r)\\
-            F_L &=&-T \sin(\alpha_r) + F_N \cos(\alpha_r)
+            F_D = T \cos(\alpha_r) + F_N \sin(\alpha_r)\\
+            F_L =-T \sin(\alpha_r) + F_N \cos(\alpha_r)
         \end{cases}
 
 Drag-Lift model
@@ -62,9 +62,9 @@ The drag, lift and torque at the rudder stock can be expressed as function of th
 
 .. math::
     \begin{cases}
-        F_D &=& \dfrac{1}{2} \rho C_d(\alpha_r) A_r V_{fRA}^2\\
-        F_L &=& \dfrac{1}{2} \rho C_l(\alpha_r) A_r V_{fRA}^2\\
-        M_n &=& \dfrac{1}{2} \rho C_n(\alpha_r) A_r c V_{fRA}^2\\
+        F_D = \dfrac{1}{2} \rho C_d(\alpha_r) A_r V_{fRA}^2\\
+        F_L = \dfrac{1}{2} \rho C_l(\alpha_r) A_r V_{fRA}^2\\
+        M_n = \dfrac{1}{2} \rho C_n(\alpha_r) A_r c V_{fRA}^2\\
     \end{cases}
 
 where :math:`\rho` is the water density, :math:`A_r` is the projected lateral area and :math:`c` is the rudder chord.
@@ -87,27 +87,26 @@ Additional parameters are required:
 
 .. math::
     \begin{cases}
-        F_D &=& \dfrac{1}{2} \rho C_d(\alpha_r) A_r V_{fRA}^2\\
-        F_L &=& \dfrac{1}{2} \rho C_l(\alpha_r) A_r V_{fRA}^2\\
-        M_n &=& \dfrac{1}{2} \rho C_{qr}(\alpha_r) A_r c V_{fRA}^2\\
+        F_D = \dfrac{1}{2} \rho C_d(\alpha_r) A_r V_{fRA}^2\\
+        F_L = \dfrac{1}{2} \rho C_l(\alpha_r) A_r V_{fRA}^2\\
+        M_n = \dfrac{1}{2} \rho C_{qr}(\alpha_r) A_r c V_{fRA}^2\\
     \end{cases}
 
 .. math::
     \begin{cases}
-        C_d &=& -(C_{d1} + C_{d2})\\
-        C_l &=& C_{l1} + C_{l2}\\
-        C_{qr} &=& C_{qn} + \dfrac{d}{c} (C_l \cos(\alpha_r) + C_d \sin(\alpha_r))\\
-        C_{qn} &=& -(C_{l1}\cos(\alpha_r) + C_{d1} \sin(\alpha_r))\left(0.47 - \dfrac{\Lambda+2}{4(\Lambda+1)}\right)\\
-                && - 0.75 (C_{l2}\cos(\alpha_r) + C_{d2} \sin(\alpha_r))
+        C_d = -(C_{d1} + C_{d2})\\
+        C_l = C_{l1} + C_{l2}\\
+        C_{qr} = C_{qn} + \dfrac{d}{c} (C_l \cos(\alpha_r) + C_d \sin(\alpha_r))\\
+        C_{qn} = -(C_{l1}\cos(\alpha_r) + C_{d1} \sin(\alpha_r))\left(0.47 - \dfrac{\Lambda+2}{4(\Lambda+1)}\right) - 0.75 (C_{l2}\cos(\alpha_r) + C_{d2} \sin(\alpha_r))
     \end{cases}
 
 .. math::
     \begin{cases}
-        C_{d1} &=& 1.1 \dfrac{C_l^2}{\pi \Lambda}\\
-        C_{d2} &=& C_q |\sin(\alpha_r)|^3 + C_{d0}\\
-        C_{d0} &=& 2.5 C_f\\
-        C_{l1} &=& \dfrac{2\pi \Lambda (\Lambda+1}{(\Lambda + 2)^2} \sin(\alpha_r)\\
-        C_{l2} &=& C_q \sin(\alpha_r) |\sin(\alpha_r)| \cos(\alpha)
+        C_{d1} = 1.1 \dfrac{C_l^2}{\pi \Lambda}\\
+        C_{d2} = C_q |\sin(\alpha_r)|^3 + C_{d0}\\
+        C_{d0} = 2.5 C_f\\
+        C_{l1} = \dfrac{2\pi \Lambda (\Lambda+1}{(\Lambda + 2)^2} \sin(\alpha_r)\\
+        C_{l2} = C_q \sin(\alpha_r) |\sin(\alpha_r)| \cos(\alpha)
     \end{cases}
 
 where :math:`\Lambda = \dfrac{b}{c} = \dfrac{A_r}{c^2}` is the rudder geometric aspect ratio, with :math:`b` and :math:`c`
@@ -134,9 +133,9 @@ The rudder loads in the vessel frame are then
 
 .. math::
     \begin{cases}
-        F_X &=& - F_N \sin(\delta_r)\\
-        F_Y &=& F_N \cos(\delta_r)\\
-        M_n &=& 0
+        F_X = - F_N \sin(\delta_r)\\
+        F_Y = F_N \cos(\delta_r)\\
+        M_n = 0
     \end{cases}
 
 Hull/propeller/rudder interactions
@@ -158,9 +157,9 @@ The rudder forces and torque expressed at the rudder position are then
 
 .. math::
     \begin{cases}
-        X_r &=& (1 - t_R) F_X\\
-        Y_r &=& (1 + a_H) F_Y\\
-        N_r &=& M_n + a_H(x_H - x_R) F_Y
+        X_r = (1 - t_R) F_X\\
+        Y_r = (1 + a_H) F_Y\\
+        N_r = M_n + a_H(x_H - x_R) F_Y
     \end{cases}
 
 with :math:`t_R` the steering resistance deduction factor and :math:`a_H` the rudder force increase factor.
@@ -202,7 +201,7 @@ The :ref:`following figure <fig_flow_straightening_terminology>` shows the termi
 effect.
 
 .. _fig_flow_straightening_terminology:
-.. figure:: ../_static/flow_straightening_terminology.png
+.. figure:: figures/flow_straightening_terminology.png
     :align: center
     :alt: flow_straightening_terminology
 
@@ -228,19 +227,19 @@ effective rudder angle.
 
 .. math::
     \begin{cases}
-    \alpha_R &=& \delta + \delta_0 - \gamma_R \beta_R\\
-    \beta_R &=& \beta - 2 x'_r r'\\
-    \gamma_R &=& C_P C_S\\
+        \alpha_R = \delta + \delta_0 - \gamma_R \beta_R\\
+        \beta_R = \beta - 2 x'_r r'\\
+        \gamma_R = C_P C_S\\
     \end{cases}
 
 where :math:`C_P` is the propeller flow rectification, and :math:`C_S` is the ship hull flow rectification. Only this last
 term is of interest in this section, and it is given by Inoue as:
 
 .. math::
-    C_S = \begin{cases}
+    C_S = \left\{\begin{array}{lllll}
             K_3 \beta_R & \text{for} & \beta_R &\leq& \dfrac{C_{S0}}{K3}\\
             C_{S0} & \text{for} & \beta_R &>& \dfrac{C_{S0}}{K3}\\
-        \end{cases}
+        \end{array}\right.
 
 with :math:`K_3 = 0.45` and :math:`C_{S0} = 0.5`.
 
@@ -282,18 +281,18 @@ transverse velocity.
 where :math:`\kappa_v` is the flow straightening corrective function, and :math:`\beta_R = atan2(v + k x_r r, u)`.
 
 .. math::
-    \kappa_v = \begin{cases}
+    \kappa_v = \left\{\begin{array}{lllll}
         min(K2, K3 |\beta_R| & \text{for} & |\beta_R| &<& \beta_1 = 1.3 rad \\
         a_v + b_v |\beta_R|  & \text{for} & |\beta_R| &\in& [\beta_1; \beta_2] \\
         1                    & \text{for} & |\beta_R| &>& \beta_2 = \dfrac{\pi}{2} \\
-    \end{cases}
+    \end{array}\right.
 
 where
 
 .. math::
     \begin{cases}
-    a_v &=& K_2 - b_v \beta_1 \\
-    b_v &=& \dfrac{1-K_2}{\beta_2 - \beta_1}
+    a_v = K_2 - b_v \beta_1 \\
+    b_v = \dfrac{1-K_2}{\beta_2 - \beta_1}
     \end{cases}
 
 and :math:`K2 = 0.5`, :math:`K3 = 0.45` (as in Inoue's model).

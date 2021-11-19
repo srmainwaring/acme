@@ -30,7 +30,7 @@ Manoeuvres were simulated with and without the hull flow straightening effect, a
 both cases, see :ref:`following figure <fig_propeller_rudder_no_lift_correction_TC>`.
 
 .. _fig_propeller_rudder_no_lift_correction_TC:
-.. figure:: ../_static/validations/propeller_rudder_no_lift_correction_TC.png
+.. figure:: figures/validations/propeller_rudder_no_lift_correction_TC.png
     :align: center
     :alt: propeller_rudder_no_lift_correction_TC
 
@@ -44,7 +44,7 @@ The correction parameters are :math:`a_H = 0.263` and :math:`x_H = -0.45`.
 The additional lift force applied forwardly to the base lift force induces a stronger turn rate of the vessel, as expected.
 
 .. _fig_propeller_rudder_lift_correction_TC:
-.. figure:: ../_static/validations/propeller_rudder_lift_correction_TC.png
+.. figure:: figures/validations/propeller_rudder_lift_correction_TC.png
     :align: center
     :alt: propeller_rudder_lift_correction_TC
 
@@ -67,7 +67,7 @@ Despite differences, and RDX022-ACME models compare well for both cases, see :re
 Since ACME model integrates more corrections, the vessel tends to turn quicker.
 
 .. _fig_prop-rudder_no_lift_correction_TC:
-.. figure:: ../_static/validations/prop-rudder_no_lift_correction_TC.png
+.. figure:: figures/validations/prop-rudder_no_lift_correction_TC.png
     :align: center
     :alt: prop-rudder_no_lift_correction_TC
 
@@ -81,7 +81,7 @@ The correction parameters are :math:`a_H = 0.263` and :math:`x_H = -0.45`.
 The additional lift force applied forwardly to the base lift force also induces a stronger turn rate of the vessel, as expected.
 
 .. _fig_prop-rudder_lift_correction_TC:
-.. figure:: ../_static/validations/prop-rudder_lift_correction_TC.png
+.. figure:: figures/validations/prop-rudder_lift_correction_TC.png
     :align: center
     :alt: prop-rudder_lift_correction_TC
 
