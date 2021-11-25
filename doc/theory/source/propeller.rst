@@ -73,7 +73,8 @@ the following table. Those quadrants are described in a macro fashion, using the
     Description of the 4 quadrants of operation, for a right-handed propeller
 
 .. warning::
-    This definition is different from the quadrants description traditionally defined to match the :math:`J`, :math:`k_T` and :math:`k_Q` nomenclature.
+    This definition is different from the quadrants description traditionally defined to match the :math:`J`, :math:`k_T`
+    and :math:`k_Q` nomenclature.
     It is also different to the one, based on the advance angle, below.
 
 Advance angle
@@ -171,7 +172,7 @@ where :math:`J_{opt}` is the maximum efficiency advance ratio, :math:`n_d` is th
 (in rps), and :math:`V_d` is the vessel's design speed.
 
 While the thrust factor can be considered constant for all manoeuvring conditions, the wake fraction is generally
-expressed using the vessel sidewash angle $beta_{P0} = atan2\left(\dfrac{v_{P0}}{u_{P0}}\right)$, based on an empirical
+expressed using the vessel sidewash angle :math:`\beta_{P0} = atan2\left(\dfrac{v_{P0}}{u_{P0}}\right)`, based on an empirical
 formulation [Inoue1981]_:
 
 .. math::
