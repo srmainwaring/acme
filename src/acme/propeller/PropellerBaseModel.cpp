@@ -32,6 +32,23 @@ namespace acme {
     m_is_initialized = true;
   }
 
+  void PropellerBaseModel::InitializeLog(hermes::Message *msg) {
+
+    msg->AddField<double>("uPA", "m/s", "apparent longitudinal velocity, at propeller",
+                          [this](){return c_uPA;});
+    msg->AddField<double>("thrust", "N", "thrust of the propeller",
+                          [this](){return c_thrust_N;});
+    msg->AddField<double>("torque", "Nm", "torque of the propeller",
+                          [this](){return c_torque_Nm;});
+    msg->AddField<double>("power", "W", "power of the propeller",
+                          [this](){return c_power_W;});
+    msg->AddField<double>("efficiency", "", "efficiency of the propeller",
+                          [this](){return c_efficiency;});
+    msg->AddField<double>("sidewash_angle", "deg", "sidewash angle at the propeller, in degrees",
+                          [this](){return c_sidewash_angle_rad * RAD2DEG;});
+
+  }
+
   PropellerModelType PropellerBaseModel::GetThrusterModelType() const {
     return m_type;
   }

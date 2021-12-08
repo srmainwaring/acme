@@ -99,19 +99,51 @@ namespace acme {
     m_is_logged = is_logged;
   }
 
+  void RudderBaseModel::InitializeLog(hermes::Message* msg) {
+
+    //FIXME
+//    msg->AddField("time", "s", "Time of the simulation",
+//                  [](){return });
+    msg->AddField<double>("u_NWU", "m/s", "vessel longitudinal velocity",
+                          [this](){return c_u_NWU;});
+    msg->AddField<double>("v_NWU", "m/s", "vessel lateral velocity",
+                          [this](){return c_v_NWU;});
+    msg->AddField<double>("uRA", "m/s", "apparent longitudinal velocity of the rudder",
+                          [this](){return c_uRA;});
+    msg->AddField<double>("vRA", "m/s", "apparent lateral velocity of the rudder",
+                          [this](){return c_vRA;});
+    msg->AddField<double>("rudder_angle", "deg", "rudder deflection angle, in degrees",
+                          [this](){return c_rudder_angle_rad * RAD2DEG;});
+    msg->AddField<double>("attack_angle", "deg", "attack angle at the rudder, in degrees",
+                          [this](){return c_alpha_R_rad * RAD2DEG;});
+    msg->AddField<double>("drift_angle", "deg", "rudder drift angle, in degrees",
+                          [this](){return c_alpha_R_rad * RAD2DEG;});
+    msg->AddField<double>("drag", "N", "drag force induced by the rudder",
+                          [this](){return c_drag_N;});
+    msg->AddField<double>("lift", "N", "lift force induced by the rudder",
+                          [this](){return c_lift_N;});
+    msg->AddField<double>("fx", "N", "longitudinal force induced by the rudder",
+                          [this](){return c_fx_N;});
+    msg->AddField<double>("lift", "N", "lateral force induced by the rudder",
+                          [this](){return c_fy_N;});
+    msg->AddField<double>("torque", "Nm", "torque induced by the rudder, at the rudder position",
+                          [this](){return c_torque_Nm;});
+
+  }
+
   void RudderBaseModel::Finalize(double time) {
     if (m_is_logged) {
-      auto log_file = "rudder_log.csv";
-      std::ofstream myfile;
-      myfile.open(log_file, std::ios::app);
-      if (!myfile.tellp()) {
-        myfile << "time;u_NWU;v_NWU;uRA;vRA;rudder_angle;alpha_R_rad;beta_R_rad;drag_N;lift_N;torque_Nm;fx_N;fy_N;" << std::endl;
-        myfile << "s;m/s;m/s;m/s;m/s;rad;rad;rad;N;N;N.m;N;N;" << std::endl;
-      }
-      myfile << time << ';' << c_u_NWU << ';' << c_v_NWU << ';' << c_uRA << ';' << c_vRA << ';'
-             << c_rudder_angle_rad << ';' << c_alpha_R_rad << ';' << c_beta_R_rad << ';'
-             << c_drag_N << ';' << c_lift_N << ';' << c_torque_Nm << ';' << c_fx_N << ';'
-             << c_fy_N << ';' << std::endl;
+//      auto log_file = "rudder_log.csv";
+//      std::ofstream myfile;
+//      myfile.open(log_file, std::ios::app);
+//      if (!myfile.tellp()) {
+//        myfile << "time;u_NWU;v_NWU;uRA;vRA;rudder_angle;alpha_R_rad;beta_R_rad;drag_N;lift_N;torque_Nm;fx_N;fy_N;" << std::endl;
+//        myfile << "s;m/s;m/s;m/s;m/s;rad;rad;rad;N;N;N.m;N;N;" << std::endl;
+//      }
+//      myfile << time << ';' << c_u_NWU << ';' << c_v_NWU << ';' << c_uRA << ';' << c_vRA << ';'
+//             << c_rudder_angle_rad << ';' << c_alpha_R_rad << ';' << c_beta_R_rad << ';'
+//             << c_drag_N << ';' << c_lift_N << ';' << c_torque_Nm << ';' << c_fx_N << ';'
+//             << c_fy_N << ';' << std::endl;
     }
   }
 

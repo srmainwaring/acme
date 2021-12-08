@@ -12,6 +12,8 @@
 
 #include "RudderModelType.h"
 
+#include "hermes/hermes.h"
+
 namespace acme {
 
   struct RudderParams {
@@ -53,6 +55,8 @@ namespace acme {
     explicit RudderBaseModel(const RudderParams &params);
 
     virtual void Initialize() = 0;
+
+    void InitializeLog(hermes::Message* msg);
 
     void Finalize(double time);
 

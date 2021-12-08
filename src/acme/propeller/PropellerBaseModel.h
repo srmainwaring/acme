@@ -7,7 +7,7 @@
 
 #include "MathUtils/Vector3d.h"
 #include "PropellerModelType.h"
-
+#include "hermes/hermes.h"
 
 namespace acme {
 
@@ -41,6 +41,8 @@ namespace acme {
                        PropellerModelType type);
 
     virtual void Initialize();
+
+    void InitializeLog(hermes::Message* msg);
 
     /// Compute the models with the specified data
     /// \param water_density in kg/m3
