@@ -105,6 +105,7 @@ latex_elements = {
 #     # \counterwithin{table}{chapter}''',
     # Latex figure (float) alignment
     'figure_align': 'H',
+    'releasename': '[CONFIDENTIAL]'
 }
 
 latex_logo = '_static/D-ICE-v.png'
