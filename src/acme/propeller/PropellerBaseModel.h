@@ -42,7 +42,7 @@ namespace acme {
 
     virtual void Initialize();
 
-    void InitializeLog(hermes::Message* msg);
+    void DefineLogMessages(hermes::Message* msg);
 
     /// Compute the models with the specified data
     /// \param water_density in kg/m3

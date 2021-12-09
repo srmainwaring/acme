@@ -56,7 +56,7 @@ namespace acme {
 
     virtual void Initialize() = 0;
 
-    void InitializeLog(hermes::Message* msg);
+    void DefineLogMessages(hermes::Message* msg);
 
     void Finalize(double time);
 

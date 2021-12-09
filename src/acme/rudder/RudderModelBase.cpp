@@ -99,11 +99,8 @@ namespace acme {
     m_is_logged = is_logged;
   }
 
-  void RudderBaseModel::InitializeLog(hermes::Message* msg) {
+  void RudderBaseModel::DefineLogMessages(hermes::Message* msg) {
 
-    //FIXME
-//    msg->AddField("time", "s", "Time of the simulation",
-//                  [](){return });
     msg->AddField<double>("u_NWU", "m/s", "vessel longitudinal velocity",
                           [this](){return c_u_NWU;});
     msg->AddField<double>("v_NWU", "m/s", "vessel lateral velocity",
@@ -124,7 +121,7 @@ namespace acme {
                           [this](){return c_lift_N;});
     msg->AddField<double>("fx", "N", "longitudinal force induced by the rudder",
                           [this](){return c_fx_N;});
-    msg->AddField<double>("lift", "N", "lateral force induced by the rudder",
+    msg->AddField<double>("fy", "N", "lateral force induced by the rudder",
                           [this](){return c_fy_N;});
     msg->AddField<double>("torque", "Nm", "torque induced by the rudder, at the rudder position",
                           [this](){return c_torque_Nm;});

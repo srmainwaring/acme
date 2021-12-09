@@ -32,7 +32,7 @@ namespace acme {
     m_is_initialized = true;
   }
 
-  void PropellerBaseModel::InitializeLog(hermes::Message *msg) {
+  void PropellerBaseModel::DefineLogMessages(hermes::Message *msg) {
 
     msg->AddField<double>("uPA", "m/s", "apparent longitudinal velocity, at propeller",
                           [this](){return c_uPA;});
