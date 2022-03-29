@@ -7,9 +7,8 @@
 
 #include <memory>
 
-#include "acme/propeller/PropellerBaseModel.h"
-#include "acme/rudder/SimpleRudderModel.h"
-#include "hermes/hermes.h"
+#include "acme/propeller/propeller.h"
+#include "acme/rudder/rudder.h"
 
 namespace acme {
 
