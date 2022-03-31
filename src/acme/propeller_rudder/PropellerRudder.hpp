@@ -125,7 +125,7 @@ namespace acme {
       // Slipstream radius at rudder position (potential)
       double rinf_r0 = r_inf / r0;
       double rinf_r0_3 = std::pow(rinf_r0, 3);
-      double x_r0_1_5 = std::pow(x_pr_m / r0, 1.5);
+      double x_r0_1_5 = std::pow(abs(x_pr_m) / r0, 1.5);
 
       double rx = r0 * (0.14 * rinf_r0_3 + rinf_r0 * x_r0_1_5) / (0.14 * rinf_r0_3 + x_r0_1_5);
 
