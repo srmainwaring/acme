@@ -44,9 +44,9 @@ int main() {
   std::string json_string = node.dump();
 
 //  std::cout << json_string << std::endl;
+  params.m_thruster_perf_data_json_string = json_string;
 
-
-  auto prop = FPP1Q(params, json_string);
+  auto prop = FPP1Q(params);
   prop.Initialize();
 
 

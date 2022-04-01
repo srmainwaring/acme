@@ -34,6 +34,9 @@ namespace acme {
 
     // Optional
 
+    // For Simple and Flap rudder models
+    std::string m_perf_data_json_string;
+
     // For Flap rudder only
     double m_flap_slope = 0.; // only used for a flap rudder type
 
@@ -78,6 +81,12 @@ namespace acme {
 
     const RudderParams &GetParameters() const;
 
+    virtual void GetClCdCn(const double &attack_angle_rad,
+                           const double &rudder_angle_rad,
+                           double &cl,
+                           double &cd,
+                           double &cn) const=0;
+
     double GetFx() const { return c_fx_N; }
 
     double GetFy() const { return c_fy_N; }
@@ -100,7 +109,7 @@ namespace acme {
 
    protected:
 
-    virtual void ComputeLoads(const double &water_density) const = 0;
+    void ComputeLoads(const double &water_density) const;
 
     bool m_is_initialized;
 

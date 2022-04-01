@@ -20,12 +20,9 @@ namespace acme {
   class SimpleRudderModel: public RudderBaseModel {
 
    public:
-    SimpleRudderModel(const RudderParams &params,
-                      const std::string &perf_data_json_string);
+    SimpleRudderModel(const RudderParams &params);
 
     void Initialize() override;
-
-    void ComputeLoads(const double &water_density) const override;
 
     virtual void GetClCdCn(const double &attack_angle_rad,
                            const double &rudder_angle_rad,
@@ -36,9 +33,6 @@ namespace acme {
    private:
 
     virtual void ParseRudderPerformanceCurveJsonString();
-
-   protected:
-    std::string m_temp_perf_data_json_string;
 
    private:
     mathutils::LookupTable1D<double, double> m_cl_cd_cn_coeffs;

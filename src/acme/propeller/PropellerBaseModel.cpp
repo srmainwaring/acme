@@ -8,11 +8,8 @@
 
 namespace acme {
 
-  PropellerBaseModel::PropellerBaseModel(const PropellerParams &params,
-                                         const std::string &perf_data_json_string,
-                                         PropellerModelType type) :
+  PropellerBaseModel::PropellerBaseModel(const PropellerParams &params, PropellerModelType type) :
       m_params(params),
-      m_temp_perf_data_json_string(perf_data_json_string),
       m_is_initialized(false),
       m_type(type),
       m_ku(1.),
@@ -25,7 +22,6 @@ namespace acme {
 
   void PropellerBaseModel::Initialize() {
     ParsePropellerPerformanceCurveJsonString();
-    m_temp_perf_data_json_string.clear();
 
     if (m_params.m_use_advance_velocity_correction_factor) ComputeAdvanceVelocityCorrectionFactor();
 

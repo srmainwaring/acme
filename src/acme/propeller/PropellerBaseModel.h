@@ -30,15 +30,16 @@ namespace acme {
 
     double m_thrust_coefficient_correction = 0.;
     double m_torque_coefficient_correction = 0.;
+
+    // contains open water curve json file content
+    std::string m_thruster_perf_data_json_string;
   };
 
 
   class PropellerBaseModel {
 
    public:
-    PropellerBaseModel(const PropellerParams &params,
-                       const std::string &perf_data_json_string,
-                       PropellerModelType type);
+    PropellerBaseModel(const PropellerParams &params, PropellerModelType type);
 
     virtual void Initialize();
 
@@ -92,7 +93,6 @@ namespace acme {
 
    protected:
     bool m_is_initialized;
-    std::string m_temp_perf_data_json_string; // Populated at instantiation and cleared at Initialization (lazy)
 
     PropellerModelType m_type;
 

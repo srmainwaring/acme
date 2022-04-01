@@ -9,8 +9,8 @@ using json = nlohmann::json;
 
 namespace acme {
 
-  CPP::CPP(const PropellerParams &params, const std::string &ct_cq_json_string) :
-      FPP4Q(params, ct_cq_json_string) {
+  CPP::CPP(const PropellerParams &params) :
+      FPP4Q(params) {
     m_type = PropellerModelType::E_CPP;  // Overrides the type E_FPP4Q
   }
 
@@ -25,7 +25,8 @@ namespace acme {
   void CPP::ParsePropellerPerformanceCurveJsonString() {
 
     std::vector<double> beta, pitch_ratio, ct, cq;
-    ParseCPPJsonString(m_temp_perf_data_json_string, beta, pitch_ratio, ct, cq);
+    ParseCPPJsonString(m_params.m_thruster_perf_data_json_string, beta, pitch_ratio, ct, cq);
+    m_params.m_thruster_perf_data_json_string.clear();
     m_ct_ct_coeffs.SetX(beta);
     m_ct_ct_coeffs.SetY(pitch_ratio);
     m_ct_ct_coeffs.AddData("ct", ct);

@@ -39,10 +39,6 @@ namespace acme {
                            double &cd,
                            double &cn) const;
 
-   protected:
-
-    void ComputeLoads(const double &water_density) const override;
-
   };
 
 } // end namespace acme

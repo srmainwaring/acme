@@ -27,7 +27,8 @@ TEST(TestFPP4Q, without_interactions) {
   params.m_hull_wake_fraction_0 = 0.;
   params.m_thrust_deduction_factor_0 = 0.;
   params.m_screw_direction = acme::RIGHT_HANDED;
-  FPP4Q propeller(params, open_water_data_table);
+  params.m_thruster_perf_data_json_string = open_water_data_table;
+  FPP4Q propeller(params);
   propeller.Initialize();
 
   // beta = 0, n = 0
@@ -120,7 +121,8 @@ TEST(TestFPP4Q, with_interactions) {
   params.m_hull_wake_fraction_0 = 0.2;
   params.m_thrust_deduction_factor_0 = 0.25;
   params.m_screw_direction = acme::RIGHT_HANDED;
-  FPP4Q propeller(params, open_water_data_table);
+  params.m_thruster_perf_data_json_string = open_water_data_table;
+  FPP4Q propeller(params);
   propeller.Initialize();
 
   // beta = 0, n = 0

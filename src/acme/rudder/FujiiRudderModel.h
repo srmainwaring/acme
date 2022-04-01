@@ -16,8 +16,11 @@ namespace acme {
 
     void Initialize() override;
 
-   protected:
-    void ComputeLoads(const double &water_density) const override;
+    virtual void GetClCdCn(const double &attack_angle_rad,
+                           const double &rudder_angle_rad,
+                           double &cl,
+                           double &cd,
+                           double &cn) const;
 
    private:
 

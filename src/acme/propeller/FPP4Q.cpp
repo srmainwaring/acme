@@ -9,8 +9,8 @@ using json = nlohmann::json;
 
 namespace acme {
 
-  FPP4Q::FPP4Q(const acme::PropellerParams &params, const std::string &ct_cq_json_string) :
-      PropellerBaseModel(params, ct_cq_json_string, PropellerModelType::E_FPP4Q),
+  FPP4Q::FPP4Q(const PropellerParams &params) :
+      PropellerBaseModel(params, PropellerModelType::E_FPP4Q),
       m_ct_ct_coeffs(mathutils::LINEAR){
   }
 
@@ -100,8 +100,8 @@ namespace acme {
      *
      */
 
-    auto jnode = json::parse(m_temp_perf_data_json_string);
-    m_temp_perf_data_json_string.clear();
+    auto jnode = json::parse(m_params.m_thruster_perf_data_json_string);
+    m_params.m_thruster_perf_data_json_string.clear();
 
     auto beta = jnode["beta_deg"].get<std::vector<double>>();
     auto ct = jnode["ct"].get<std::vector<double>>();

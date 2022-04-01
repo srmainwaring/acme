@@ -18,15 +18,15 @@ namespace acme {
 
   }
 
-  void FujiiRudderModel::ComputeLoads(const double &water_density) const {
+  void
+  FujiiRudderModel::GetClCdCn(const double &attack_angle_rad, const double &rudder_angle_rad, double &cl, double &cd,
+                              double &cn) const {
 
-    // Normal force in rudder frame
-    double q = 0.5 * water_density * (c_uRA * c_uRA + c_vRA * c_vRA); // stagnation pressure at rudder position
-    auto c_normal_N = q * m_params.m_lateral_area_m2 * m_f_alpha * sin(c_alpha_R_rad);
-
-    // Projection in vessel frame
-    c_fx_N = -c_normal_N * sin(c_rudder_angle_rad);
-    c_fy_N = c_normal_N * cos(c_rudder_angle_rad);
+    double salpha = std::sin(attack_angle_rad);
+    double calpha = std::cos(attack_angle_rad);
+    cd = -m_f_alpha * salpha * salpha;
+    cl = m_f_alpha * salpha * calpha;
+    cn = 0.;
 
   }
 

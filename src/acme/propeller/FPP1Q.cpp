@@ -12,8 +12,8 @@ using json = nlohmann::json;
 
 namespace acme {
 
-  FPP1Q::FPP1Q(const PropellerParams &params, const std::string &kt_kq_json_string) :
-      PropellerBaseModel(params, kt_kq_json_string, PropellerModelType::E_FPP1Q),
+  FPP1Q::FPP1Q(const PropellerParams &params) :
+      PropellerBaseModel(params, PropellerModelType::E_FPP1Q),
       m_kt_kq_coeffs(mathutils::LINEAR){
   }
 
@@ -115,7 +115,8 @@ namespace acme {
      *
      */
 
-    auto jnode = json::parse(m_temp_perf_data_json_string);
+    auto jnode = json::parse(m_params.m_thruster_perf_data_json_string);
+    m_params.m_thruster_perf_data_json_string.clear();
 
     auto j = jnode["j"].get<std::vector<double>>();
     auto kt = jnode["kt"].get<std::vector<double>>();

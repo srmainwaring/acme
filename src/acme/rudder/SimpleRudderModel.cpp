@@ -13,39 +13,15 @@ using json = nlohmann::json;
 
 namespace acme {
 
-  SimpleRudderModel::SimpleRudderModel(const RudderParams &params,
-                                       const std::string &perf_data_json_string) :
+  SimpleRudderModel::SimpleRudderModel(const RudderParams &params) :
   RudderBaseModel(params),
-  m_temp_perf_data_json_string(perf_data_json_string),
   m_cl_cd_cn_coeffs(mathutils::LINEAR){
 
   }
 
   void SimpleRudderModel::Initialize() {
     ParseRudderPerformanceCurveJsonString();
-    m_temp_perf_data_json_string.clear();
     m_is_initialized = true;
-  }
-
-  void SimpleRudderModel::ComputeLoads(const double &water_density) const {
-
-    // Get coefficients
-    double cl, cd, cn;
-    GetClCdCn(c_alpha_R_rad, c_rudder_angle_rad, cl, cd, cn);
-
-    // Forces in flow frame
-    double q = 0.5 * water_density * (c_uRA * c_uRA + c_vRA * c_vRA); // stagnation pressure at rudder position
-    c_drag_N = q * cd * m_params.m_lateral_area_m2;
-    c_lift_N = q * cl * m_params.m_lateral_area_m2;
-    c_torque_Nm = q * cn * m_params.m_lateral_area_m2 * m_params.m_chord_m;
-
-    // Forces in body frame
-    double Cbeta = std::cos(c_beta_R_rad);
-    double Sbeta = std::sin(c_beta_R_rad);
-
-    c_fx_N = Cbeta * c_drag_N - Sbeta * c_lift_N;
-    c_fy_N = Sbeta * c_drag_N + Cbeta * c_lift_N;
-
   }
 
   void SimpleRudderModel::GetClCdCn(const double &attack_angle_rad,
@@ -68,7 +44,7 @@ namespace acme {
   void SimpleRudderModel::ParseRudderPerformanceCurveJsonString() {
 
     std::vector<double> attack_angle_rad, cd, cl, cn;
-    ParseRudderJsonString(m_temp_perf_data_json_string, attack_angle_rad, cd, cl, cn);
+    ParseRudderJsonString(m_params.m_perf_data_json_string, attack_angle_rad, cd, cl, cn);
     m_cl_cd_cn_coeffs.SetX(attack_angle_rad);
     m_cl_cd_cn_coeffs.AddY("cd", cd);
     m_cl_cd_cn_coeffs.AddY("cl", cl);

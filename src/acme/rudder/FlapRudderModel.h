@@ -16,7 +16,7 @@ namespace acme {
   class FlapRudderModel : public SimpleRudderModel {
 
    public:
-    FlapRudderModel(const RudderParams params, const std::string &perf_data_json_string);
+    FlapRudderModel(const RudderParams params);
 
     void GetClCdCn(const double &attack_angle_rad,
                    const double &rudder_angle_rad,

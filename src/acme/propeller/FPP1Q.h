@@ -17,7 +17,7 @@ namespace acme {
   class FPP1Q : public PropellerBaseModel {
 
    public:
-    FPP1Q(const PropellerParams &params, const std::string &kt_kq_json_string);
+    FPP1Q(const PropellerParams &params);
 
     void Compute(const double &water_density,
                  const double &u_NWU,

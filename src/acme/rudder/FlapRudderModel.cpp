@@ -11,8 +11,8 @@ using json = nlohmann::json;
 namespace acme {
 
 
-  FlapRudderModel::FlapRudderModel(const RudderParams params, const std::string &perf_data_json_string)
-      : SimpleRudderModel(params, perf_data_json_string) {
+  FlapRudderModel::FlapRudderModel(const RudderParams params)
+      : SimpleRudderModel(params) {
     m_type = RudderModelType::E_FLAP_RUDDER;  // Overrides the E_SIMPLE_RUDDER
   }
 
@@ -34,7 +34,7 @@ namespace acme {
   void FlapRudderModel::ParseRudderPerformanceCurveJsonString() {
     std::string json_string;
     std::vector<double> attack_angle_rad, flap_angle_rad, cd, cl, cn;
-    ParseFlapRudderJsonString(m_temp_perf_data_json_string, attack_angle_rad, flap_angle_rad, cd, cl, cn);
+    ParseFlapRudderJsonString(m_params.m_perf_data_json_string, attack_angle_rad, flap_angle_rad, cd, cl, cn);
     m_cl_cd_cn_coeffs.SetX(attack_angle_rad);
     m_cl_cd_cn_coeffs.SetY(flap_angle_rad);
     m_cl_cd_cn_coeffs.AddData("cd", cd);
