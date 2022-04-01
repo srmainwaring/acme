@@ -70,7 +70,7 @@ namespace acme {
 
       if (rudder_params.m_has_hull_influence_transverse_velocity) {
         double beta_R = atan2(v_NWU_ship_ms + 2 * x_gr_m * r_rads, u_NWU_ship_ms);
-        double kappa = SimpleRudderModel::HullStraighteningFunction(beta_R);
+        double kappa = RudderBaseModel::HullStraighteningFunction(beta_R);
         c_vRA *= kappa;
       }
     }

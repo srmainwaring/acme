@@ -14,6 +14,7 @@ namespace acme {
 
     auto aspect_ratio = m_params.m_lateral_area_m2 / (m_params.m_chord_m * m_params.m_chord_m);
     m_f_alpha = 6.13 * aspect_ratio / (aspect_ratio + 2.25);
+    m_is_initialized = true;
 
   }
 
