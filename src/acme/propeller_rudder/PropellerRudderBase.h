@@ -24,6 +24,8 @@ namespace acme {
 
     virtual void Initialize() = 0;
 
+    virtual void DefineLogMessages(hermes::Message *propeller_message, hermes::Message *rudder_message) = 0;
+
     /// Perform the model calculations
     /// \param water_density in kg/m**3
     /// \param u_NWU_propeller_ms axial velocity with respect to water at the propeller location as obtained from rigid
