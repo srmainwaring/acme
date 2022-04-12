@@ -12,6 +12,12 @@
 
 namespace acme {
 
+  enum PropellerRudderModelType {
+    E_BRIX,
+    E_MMG
+  };
+
+
   class PropellerRudderBase {
 
    public:
