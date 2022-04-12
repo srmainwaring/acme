@@ -25,6 +25,12 @@ namespace acme {
                  const double &rpm,
                  const double &pitch_ratio) const override; // pitch ratio not used in this model, may be any value
 
+    double J() const;
+
+    double kt(const double J) const;
+
+    double kq(const double J) const;
+
    private:
 
     void GetKtKq(const double &J, double &kt, double &kq) const;
@@ -33,6 +39,8 @@ namespace acme {
 
    private:
     mathutils::LookupTable1D<double, double> m_kt_kq_coeffs;
+
+    mutable double c_J;
 
   };
 

@@ -16,10 +16,15 @@
 
 namespace acme {
 
+  // Forward declaration
+
+  template<class Rudder>
+  class MMGPropellerRudder;
+
   struct RudderParams {
     double m_lateral_area_m2; // Rudder lateral projected area (m**2)
-    double m_chord_m; // Rudder chord length at its half height
-    double m_height_m;
+    double m_chord_m;         // Rudder chord length at its half height
+    double m_height_m;        // rudder span length
 
     // Hull/propeller/rudder interaction coefficients
     bool m_has_hull_influence = true;
@@ -109,7 +114,15 @@ namespace acme {
 
    protected:
 
-    void ComputeLoads(const double &water_density) const;
+    /// Perform the model calculations
+    /// \param water_density in kg/m**3
+    /// \param uR_ms axial velocity with respect to water at the rudder location, including interaction effects in m/s
+    /// \param vR_ms radial velocity with respect to water at the rudder location, including interaction effects in m/s
+    /// \param alpha_R_rad rudder attack angle, in rad
+    void ComputeLoads(const double &water_density,
+                      const double &uR_ms,
+                      const double &vR_ms,
+                      const double &alpha_R_rad) const;
 
     bool m_is_initialized;
 
@@ -134,6 +147,8 @@ namespace acme {
     mutable double c_v_NWU{};
     mutable double c_uRA{};
     mutable double c_vRA{};
+
+    template<class Rudder> friend class MMGPropellerRudder;
 
   };
 

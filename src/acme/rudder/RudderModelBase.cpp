@@ -76,7 +76,7 @@ namespace acme {
     c_alpha_R_rad = mathutils::Normalize__PI_PI(c_alpha_R_rad);
 
     // Get coefficients
-    ComputeLoads(water_density);
+    ComputeLoads(water_density, c_uRA, c_vRA, c_alpha_R_rad);
 
     // Hull/rudder interactions
     if (m_params.m_has_hull_influence) {
@@ -87,21 +87,25 @@ namespace acme {
 
   }
 
-  void RudderBaseModel::ComputeLoads(const double &water_density) const {
+  void RudderBaseModel::ComputeLoads(const double &water_density,
+                                     const double &uR_ms,
+                                     const double &vR_ms,
+                                     const double &alpha_R_rad) const {
 
     // Get coefficients
     double cl, cd, cn;
-    GetClCdCn(c_alpha_R_rad, 0., cl, cd, cn);
+    GetClCdCn(alpha_R_rad, 0., cl, cd, cn);
 
     // Forces in flow frame
-    double q = 0.5 * water_density * (c_uRA * c_uRA + c_vRA * c_vRA); // stagnation pressure at rudder position
+    double q = 0.5 * water_density * (uR_ms * uR_ms + vR_ms * vR_ms); // stagnation pressure at rudder position
     c_drag_N = q * cd * m_params.m_lateral_area_m2;
     c_lift_N = q * cl * m_params.m_lateral_area_m2;
     c_torque_Nm = q * cn * m_params.m_lateral_area_m2 * m_params.m_chord_m;
 
     // Forces in body frame
-    double Cbeta = std::cos(c_beta_R_rad);
-    double Sbeta = std::sin(c_beta_R_rad);
+    auto beta_R_rad = std::atan2(vR_ms, uR_ms);
+    double Cbeta = std::cos(beta_R_rad);
+    double Sbeta = std::sin(beta_R_rad);
 
     c_fx_N = Cbeta * c_drag_N - Sbeta * c_lift_N;
     c_fy_N = Sbeta * c_drag_N + Cbeta * c_lift_N;

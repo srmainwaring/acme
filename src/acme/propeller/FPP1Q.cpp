@@ -51,13 +51,12 @@ namespace acme {
     //    becomes only resistive and gives no thrust despite its direction of rotation that has not changed. For
     //    simulations requiring this kind of regime to be taken into account, a FPP4 model would be best required.
 
-    double J;
     double kt, kq;
     bool is_out_of_range = false;
     if (n > 0.) {
-      J = uPA / (n * m_params.m_diameter_m);
+      c_J = uPA / (n * m_params.m_diameter_m);
       try {
-        GetKtKq(J, kt, kq);
+        GetKtKq(c_J, kt, kq);
       } catch (std::exception &e) {
         // J > Jmax
         std::string error(e.what());
@@ -88,7 +87,7 @@ namespace acme {
     c_torque_Nm = water_density * n2 * D4 * m_params.m_diameter_m * _kq;
 
     // Efficiency
-    c_efficiency = is_out_of_range ? 0. : J * _kt / (MU_2PI * _kq);
+    c_efficiency = is_out_of_range ? 0. : c_J * _kt / (MU_2PI * _kq);
 
     // Power
     c_power_W = MU_2PI * n * c_torque_Nm;
@@ -142,6 +141,18 @@ namespace acme {
   void FPP1Q::GetKtKq(const double &J, double &kt, double &kq) const {
     kt = m_kt_kq_coeffs.Eval("kt", J);
     kq = m_kt_kq_coeffs.Eval("kq", J);
+  }
+
+  double FPP1Q::J() const {
+    return c_J;
+  }
+
+  double FPP1Q::kt(const double J) const {
+    return m_kt_kq_coeffs.Eval("kt", J);;
+  }
+
+  double FPP1Q::kq(const double J) const {
+    return m_kt_kq_coeffs.Eval("kq", J);;
   }
 
 }  // end namespace acme
