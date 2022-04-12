@@ -20,20 +20,22 @@ namespace acme {
     // is always into the slipstream and thus eta = 1
     m_eta = (Dp < HR) ? Dp / HR : 1.;
 
+    m_gamma_R = rudder_params.m_flow_straightening;
+
   }
 
   template<class Rudder>
   void MMGPropellerRudder<Rudder>::Compute(const double &water_density,
-                                                      const double &u_NWU_propeller_ms,
-                                                      const double &v_NWU_propeller_ms,
-                                                      const double &u_NWU_ship_ms,
-                                                      const double &v_NWU_ship_ms,
-                                                      const double &r_rads,
-                                                      const double &x_pr_m,
-                                                      const double &x_gr_m,
-                                                      const double &rpm,
-                                                      const double &pitch_ratio,
-                                                      const double &rudder_angle_deg) const {
+                                           const double &u_NWU_propeller_ms,
+                                           const double &v_NWU_propeller_ms,
+                                           const double &u_NWU_ship_ms,
+                                           const double &v_NWU_ship_ms,
+                                           const double &r_rads,
+                                           const double &x_pr_m,
+                                           const double &x_gr_m,
+                                           const double &rpm,
+                                           const double &pitch_ratio,
+                                           const double &rudder_angle_deg) const {
 
     /**
      * Solving for propeller action directly using propeller classes implementation
@@ -86,7 +88,7 @@ namespace acme {
 
   template<class Rudder>
   void MMGPropellerRudder<Rudder>::DefineLogMessages(hermes::Message *propeller_message,
-                                                                hermes::Message *rudder_message) {
+                                                     hermes::Message *rudder_message) {
 
     PropellerRudder<FPP1Q, Rudder>::DefineLogMessages(propeller_message, rudder_message);
 

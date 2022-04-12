@@ -25,7 +25,7 @@ namespace acme {
 
    private:
 
-    double m_gamma_R; // flow straigthening factor
+    double m_gamma_R; // flow straightening factor
     double m_kappa;   // correction factor
     double m_eta;     // ratio of propeller diameter to rudder span
   };

@@ -50,6 +50,10 @@ namespace acme {
     double m_Cf=0.; // ITTC57 frictional resistance coefficient, can be computed with function compute_ITTC57_frictional_resistance_coefficient()
     double m_Cq=1.; // Rudder resistance coefficient, approximated to 1 by Brix for rudder with sharp upper and lower edges. Smaller values for rounded edges (see above 1.2.11)
 
+    // For MMG hull/rudder interactions
+    double m_flow_straightening;  // also denoted gamma_R
+//    double m_correction_factor;   // also denoted as kappa
+
   };
 
   double compute_ITTC57_frictional_resistance_coefficient(double rudder_chord_m,
