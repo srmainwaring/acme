@@ -26,8 +26,8 @@ void comp_Technip(){
 
   std::ifstream tmp_buffer("/home/lletourn/Documents/tools/minos/data/rdx022/flap_rudder.json");
   json node = json::parse(tmp_buffer);
-  auto tmp_string = node["rudder"]["load_coefficients"].dump();
-  auto flap_rudder = FlapRudderModel(params, tmp_string);
+  params.m_perf_data_json_string = node["rudder"]["load_coefficients"].dump();
+  auto flap_rudder = FlapRudderModel(params);
   flap_rudder.Initialize();
 
   auto angles = mathutils::linspace(-20, 20, 41);
@@ -63,8 +63,8 @@ void comp_TARA(){
 
   std::ifstream tmp_buffer("/home/lletourn/Documents/tools/minos/data/rdx027/rudder.json");
   json node = json::parse(tmp_buffer);
-  auto tmp_string = node["rudder"]["load_coefficients"].dump();
-  auto TARA_rudder = SimpleRudderModel(params, tmp_string);
+  params.m_perf_data_json_string = node["rudder"]["load_coefficients"].dump();
+  auto TARA_rudder = SimpleRudderModel(params);
   TARA_rudder.Initialize();
 
   auto angles = mathutils::linspace(-25, 25, 51);

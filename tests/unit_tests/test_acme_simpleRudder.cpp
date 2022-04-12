@@ -78,8 +78,9 @@ TEST(TestRudder, forces) {
   params.m_chord_m = 2.;
   params.m_lateral_area_m2 = 4.;
   params.m_flap_slope = 0.; //NA
+  params.m_perf_data_json_string = ss.str();
 
-  auto acme_rudder = SimpleRudderModel(params, ss.str());
+  auto acme_rudder = SimpleRudderModel(params);
   acme_rudder.Initialize();
 
   // u = 0, v = 0
@@ -127,7 +128,7 @@ TEST(TestRudder, forces) {
   params.m_lateral_area_m2 = 15.;
   params.m_flap_slope = 0.; //NA
 
-  auto acme_rudder2 = SimpleRudderModel(params, ss.str());
+  auto acme_rudder2 = SimpleRudderModel(params);
   acme_rudder2.Initialize();
 
   // u = 1, v = 0, delta = 20
@@ -144,7 +145,7 @@ TEST(TestRudder, forces) {
   params.m_has_hull_influence = true;
   params.m_has_hull_influence_transverse_velocity = false;
 
-  auto acme_rudder3 = SimpleRudderModel(params, ss.str());
+  auto acme_rudder3 = SimpleRudderModel(params);
   acme_rudder3.Initialize();
 
   // u = 1, v = 0, delta = 0
