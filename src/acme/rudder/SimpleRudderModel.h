@@ -42,8 +42,7 @@ namespace acme {
   void ParseRudderJsonString(const std::string &json_string,
                              std::vector<double> &attack_angle_rad,
                              std::vector<double> &cd,
-                             std::vector<double> &cl,
-                             std::vector<double> &cn);
+                             std::vector<double> &cl);
 
 
 }  // end namespace acme

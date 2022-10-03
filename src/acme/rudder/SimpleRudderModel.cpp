@@ -44,7 +44,10 @@ namespace acme {
   void SimpleRudderModel::ParseRudderPerformanceCurveJsonString() {
 
     std::vector<double> attack_angle_rad, cd, cl, cn;
-    ParseRudderJsonString(m_params.m_perf_data_json_string, attack_angle_rad, cd, cl, cn);
+
+    ParseRudderJsonString(m_params.m_perf_data_json_string, attack_angle_rad, cd, cl);
+    cn = std::vector<double>(cd.size(), 0.0); // Fill cn with 0, not loaded from json ...
+
     m_cl_cd_cn_coeffs.SetX(attack_angle_rad);
     m_cl_cd_cn_coeffs.AddY("cd", cd);
     m_cl_cd_cn_coeffs.AddY("cl", cl);
@@ -58,57 +61,21 @@ namespace acme {
   void ParseRudderJsonString(const std::string &json_string,
                              std::vector<double> &attack_angle_rad,
                              std::vector<double> &cd,
-                             std::vector<double> &cl, std::vector<double> &cn) {
-
-    std::string fc, dc;
+                             std::vector<double> &cl) {
 
     json node = json::parse(json_string);
     unsigned int n;
 
-//    auto node = j["rudder"];
-
     try {
-      fc = node["frame_convention"].get<json::string_t>();
-      if (fc != "NWU" and fc != "NED")
-        throw std::runtime_error("SimpleRudderModel parser : frame convention should be : NWU or NED");
-    } catch (json::parse_error &err) {
-      std::cerr << "SimpleRudderModel parser : no frame_convention in load_coefficients";
-      exit(EXIT_FAILURE);
-    } catch (const std::exception &d) {
-      std::cerr << d.what();
-      exit(EXIT_FAILURE);
-    }
-
-    try {
-      dc = node["direction_convention"].get<json::string_t>();
-      if (dc != "GOTO" and dc != "COMEFROM")
-        throw std::runtime_error("SimpleRudderModel parser : frame convention should be : GOTO or COMEFROM");
-      if (dc == "GOTO") // FIXME
-        std::cout << "GOTO not supported yet in rudder parsing !!!";
-    } catch (json::parse_error &err) {
-      std::cerr << "SimpleRudderModel parser : no direction_convention in load_coefficients";
-      exit(EXIT_FAILURE);
-    } catch (const std::exception &d) {
-      std::cerr << d.what();
-      exit(EXIT_FAILURE);
-    }
-
-    try {
-      attack_angle_rad = node["flow_incidence_on_main_rudder_deg"].get<std::vector<double>>();
+      attack_angle_rad = node["angle_of_attack_deg"].get<std::vector<double>>();
       n = attack_angle_rad.size();
       if (!std::is_sorted(attack_angle_rad.begin(), attack_angle_rad.end()))
         throw std::runtime_error("SimpleRudderModel parser : flow_incidence_on_main_rudder_deg not sorted");
       for (auto &angle:attack_angle_rad) {
         angle *= DEG2RAD;
       }
-      //FIXME : change from GOTO to COMEFROM
-//      if (dc == "GOTO")
-//        for (auto &angle:attack_angle_rad) {
-//          angle =+ MU_PI;
-//          angle = mathutils::Normalize__PI_PI(angle);
-//        }
     } catch (json::parse_error &err) {
-      std::cerr << "SimpleRudderModel parser : no flow_incidence_on_main_rudder_deg in load_coefficients";
+      std::cerr << "SimpleRudderModel parser : no angle_of_attack_deg in load_coefficients";
       exit(EXIT_FAILURE);
     } catch (const std::exception &d) {
       std::cerr << d.what();
@@ -116,12 +83,12 @@ namespace acme {
     }
 
     try {
-      cd = node["Cd"].get<std::vector<double>>();
+      cd = node["cd"].get<std::vector<double>>();
       if (cd.size() != n)
         throw std::runtime_error(
-            "SimpleRudderModel parser : Cd not covering all flow_incidence_on_main_rudder_deg range");
+            "SimpleRudderModel parser : cd not covering all angle_of_attack_deg range");
     } catch (json::parse_error &err) {
-      std::cerr << "SimpleRudderModel parser : no Cd in load_coefficients";
+      std::cerr << "SimpleRudderModel parser : no cd in load_coefficients";
       exit(EXIT_FAILURE);
     } catch (const std::exception &d) {
       std::cerr << d.what();
@@ -129,29 +96,12 @@ namespace acme {
     }
 
     try {
-      cl = node["Cl"].get<std::vector<double>>();
+      cl = node["cl"].get<std::vector<double>>();
       if (cl.size() != n)
         throw std::runtime_error(
-            "SimpleRudderModel parser : Cd not covering all flow_incidence_on_main_rudder_deg range");
+            "SimpleRudderModel parser : cl not covering all angle_of_attack_deg range");
     } catch (json::parse_error &err) {
-      std::cerr << "SimpleRudderModel parser : no Cl in load_coefficients";
-      exit(EXIT_FAILURE);
-    } catch (const std::exception &d) {
-      std::cerr << d.what();
-      exit(EXIT_FAILURE);
-    }
-
-    try {
-      cn = node["Cn"].get<std::vector<double>>();
-      if (cn.size() != n)
-        throw std::runtime_error(
-            "SimpleRudderModel parser : Cd not covering all flow_incidence_on_main_rudder_deg range");
-      if (fc == "NED")
-        for (auto &coeff : cn) {
-          coeff *= -1;
-        }
-    } catch (json::parse_error &err) {
-      std::cerr << "SimpleRudderModel parser : no Cn in load_coefficients";
+      std::cerr << "SimpleRudderModel parser : no cl in load_coefficients";
       exit(EXIT_FAILURE);
     } catch (const std::exception &d) {
       std::cerr << d.what();
