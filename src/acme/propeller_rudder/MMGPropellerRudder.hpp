@@ -70,10 +70,11 @@ namespace acme {
     // Applying correction due to propeller slipstream
     auto J = this->m_propeller->J();
     auto kt = this->m_propeller->kt(J);
-    double tmp = 1. + m_kappa * (std::sqrt(1. + 8. * kt / (MU_PI * J * J)) - 1.);
-
-    // TODO: calculer dynamiquement eta avec une formule donnant un rayon de slipstream au niveau du safran
-    uR_ms *= std::sqrt(m_eta * tmp * tmp + (1. - m_eta));
+    if (J > DBL_EPSILON) {
+      double tmp = 1. + m_kappa * (std::sqrt(1. + 8. * kt / (MU_PI * J * J)) - 1.);
+      // TODO: calculer dynamiquement eta avec une formule donnant un rayon de slipstream au niveau du safran
+      uR_ms *= std::sqrt(m_eta * tmp * tmp + (1. - m_eta));
+    }
 
     // Attack angle
     auto alpha_R_rad = rudder_angle_deg * MU_PI_180 - std::atan2(vR_ms, uR_ms);
