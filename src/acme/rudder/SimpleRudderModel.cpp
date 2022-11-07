@@ -45,8 +45,7 @@ namespace acme {
 
     std::vector<double> attack_angle_rad, cd, cl, cn;
 
-    ParseRudderJsonString(m_params.m_perf_data_json_string, attack_angle_rad, cd, cl);
-    cn = std::vector<double>(cd.size(), 0.0); // Fill cn with 0, not loaded from json ...
+    ParseRudderJsonString(m_params.m_perf_data_json_string, attack_angle_rad, cd, cl, cn);
 
     m_cl_cd_cn_coeffs.SetX(attack_angle_rad);
     m_cl_cd_cn_coeffs.AddY("cd", cd);
@@ -61,7 +60,8 @@ namespace acme {
   void ParseRudderJsonString(const std::string &json_string,
                              std::vector<double> &attack_angle_rad,
                              std::vector<double> &cd,
-                             std::vector<double> &cl) {
+                             std::vector<double> &cl,
+                             std::vector<double> &cn) {
 
     json node = json::parse(json_string);
     unsigned int n;
@@ -70,7 +70,7 @@ namespace acme {
       attack_angle_rad = node["angle_of_attack_deg"].get<std::vector<double>>();
       n = attack_angle_rad.size();
       if (!std::is_sorted(attack_angle_rad.begin(), attack_angle_rad.end()))
-        throw std::runtime_error("SimpleRudderModel parser : flow_incidence_on_main_rudder_deg not sorted");
+        throw std::runtime_error("SimpleRudderModel parser : angle_of_attack_deg not sorted");
       for (auto &angle:attack_angle_rad) {
         angle *= DEG2RAD;
       }
@@ -103,6 +103,19 @@ namespace acme {
     } catch (json::parse_error &err) {
       std::cerr << "SimpleRudderModel parser : no cl in load_coefficients";
       exit(EXIT_FAILURE);
+    } catch (const std::exception &d) {
+      std::cerr << d.what();
+      exit(EXIT_FAILURE);
+    }
+
+    try {
+      cn = node["cn"].get<std::vector<double>>();
+      if (cl.size() != n)
+        throw std::runtime_error(
+            "SimpleRudderModel parser : cn not covering all angle_of_attack_deg range");
+    } catch (json::parse_error &err) {
+      std::cerr << "SimpleRudderModel parser : no cn in load_coefficients. Set zeros";
+      cn = std::vector<double>(cd.size(), 0.0); // Fill cn with 0, not loaded from json ...
     } catch (const std::exception &d) {
       std::cerr << d.what();
       exit(EXIT_FAILURE);

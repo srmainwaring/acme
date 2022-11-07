@@ -64,12 +64,11 @@ TEST(TestRudder, forces) {
                             -0.11684787273406982};
 
   std::stringstream ss;
-  ss << R"({"flow_incidence_on_main_rudder_deg": )"
+  ss << R"({"angle_of_attack_deg": )"
      << str(flow_incidence_on_main_rudder_deg.begin(), flow_incidence_on_main_rudder_deg.end())
-     << R"(, "Cd": )" << str(cd.begin(), cd.end())
-     << R"(, "Cl": )" << str(cl.begin(), cl.end())
-     << R"(, "Cn": )" << str(cn.begin(), cn.end())
-     << R"(, "frame_convention": "NWU", "direction_convention": "COMEFROM")"
+     << R"(, "cd": )" << str(cd.begin(), cd.end())
+     << R"(, "cl": )" << str(cl.begin(), cl.end())
+     << R"(, "cn": )" << str(cn.begin(), cn.end())
      << "}";
 
 

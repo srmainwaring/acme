@@ -2,6 +2,7 @@
 // Created by frongere on 09/08/2021.
 //
 
+#include <cfloat>
 #include "MMGPropellerRudder.h"
 
 namespace acme {
