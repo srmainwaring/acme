@@ -8,6 +8,9 @@
 
 namespace acme {
 
+  PropellerBaseModel::~PropellerBaseModel() {
+  }
+
   PropellerBaseModel::PropellerBaseModel(const PropellerParams &params, PropellerModelType type) :
       m_params(params),
       m_is_initialized(false),

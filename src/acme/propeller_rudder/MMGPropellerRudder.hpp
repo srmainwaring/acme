@@ -71,7 +71,7 @@ namespace acme {
     // Applying correction due to propeller slipstream
     auto J = this->m_propeller->J();
     auto kt = this->m_propeller->kt(J);
-    if (J > DBL_EPSILON) {
+    if (J > std::numeric_limits<double>::epsilon()) {
       double tmp = 1. + m_kappa * (std::sqrt(1. + 8. * kt / (MU_PI * J * J)) - 1.);
       // TODO: calculer dynamiquement eta avec une formule donnant un rayon de slipstream au niveau du safran
       uR_ms *= std::sqrt(m_eta * tmp * tmp + (1. - m_eta));

@@ -22,8 +22,8 @@ int main() {
 
   // TODO: Donnees a ajouter dans le json
   params.m_use_advance_velocity_correction_factor = false;
-  params.m_propeller_design_rpm;
-  params.m_vessel_design_speed_ms;
+  // params.m_propeller_design_rpm;
+  // params.m_vessel_design_speed_ms;
 
   params.m_thrust_coefficient_correction = 0.;
   params.m_torque_coefficient_correction = 0.;

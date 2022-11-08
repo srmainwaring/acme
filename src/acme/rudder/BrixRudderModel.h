@@ -24,6 +24,7 @@ namespace acme {
 
 
    public:
+    virtual ~BrixRudderModel();
 
     /// Brix rudder model, based on estimations for the drag, lift and torque at rudder's stock
     /// \param params rudder parameters
@@ -31,13 +32,13 @@ namespace acme {
     explicit BrixRudderModel(const RudderParams &params,
                              const std::string &rudder_perf_data_json_string="");
 
-    void Initialize() override;
+    virtual void Initialize() override;
 
     virtual void GetClCdCn(const double &attack_angle_rad,
                            const double &rudder_angle_rad,
                            double &cl,
                            double &cd,
-                           double &cn) const;
+                           double &cn) const override;
 
   };
 

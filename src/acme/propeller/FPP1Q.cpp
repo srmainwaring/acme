@@ -12,6 +12,9 @@ using json = nlohmann::json;
 
 namespace acme {
 
+  FPP1Q::~FPP1Q() {
+  }
+
   FPP1Q::FPP1Q(const PropellerParams &params) :
       PropellerBaseModel(params, PropellerModelType::E_FPP1Q),
       m_kt_kq_coeffs(mathutils::LINEAR){

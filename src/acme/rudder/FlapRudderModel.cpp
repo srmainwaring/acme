@@ -10,6 +10,8 @@ using json = nlohmann::json;
 
 namespace acme {
 
+  FlapRudderModel::~FlapRudderModel() {
+  }
 
   FlapRudderModel::FlapRudderModel(const RudderParams params)
       : SimpleRudderModel(params) {

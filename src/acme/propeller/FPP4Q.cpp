@@ -9,6 +9,9 @@ using json = nlohmann::json;
 
 namespace acme {
 
+  FPP4Q::~FPP4Q() {
+  }
+
   FPP4Q::FPP4Q(const PropellerParams &params) :
       PropellerBaseModel(params, PropellerModelType::E_FPP4Q),
       m_ct_ct_coeffs(mathutils::LINEAR){

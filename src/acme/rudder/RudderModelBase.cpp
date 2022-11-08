@@ -22,6 +22,9 @@ namespace acme {
     return 0.075 / pow(log10(Re - 2), 2);
   }
 
+  RudderBaseModel::~RudderBaseModel() {
+  }
+
   RudderBaseModel::RudderBaseModel(const RudderParams &params) :
       m_params(params),
       m_type(RudderModelType::E_SIMPLE_RUDDER),

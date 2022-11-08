@@ -67,7 +67,7 @@ namespace acme {
     c_uRA = u_R0;
     c_vRA = v_R0;
 
-    if (rudder_params.m_has_hull_influence and u_R0 > DBL_EPSILON) {
+    if (rudder_params.m_has_hull_influence and u_R0 > std::numeric_limits<double>::epsilon()) {
       double rudder_sidewash_angle_0 = std::atan2(v_R0, u_R0);
 
       // Estimated wake fraction for the rudder

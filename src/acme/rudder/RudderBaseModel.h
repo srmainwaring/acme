@@ -64,6 +64,8 @@ namespace acme {
   class RudderBaseModel {
 
    public:
+    virtual ~RudderBaseModel();
+    
     explicit RudderBaseModel(const RudderParams &params);
 
     virtual void Initialize() = 0;

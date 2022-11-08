@@ -13,6 +13,9 @@ using json = nlohmann::json;
 
 namespace acme {
 
+  SimpleRudderModel::~SimpleRudderModel() {
+  }
+
   SimpleRudderModel::SimpleRudderModel(const RudderParams &params) :
   RudderBaseModel(params),
   m_cl_cd_cn_coeffs(mathutils::LINEAR){

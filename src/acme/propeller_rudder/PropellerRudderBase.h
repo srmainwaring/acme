@@ -21,6 +21,7 @@ namespace acme {
   class PropellerRudderBase {
 
    public:
+    virtual ~PropellerRudderBase();
 
     virtual void Initialize() = 0;
 
@@ -112,7 +113,7 @@ namespace acme {
 
     double GetPropellerRudderMz() const override;
 
-    virtual void DefineLogMessages(hermes::Message *propeller_message, hermes::Message *rudder_message);
+    virtual void DefineLogMessages(hermes::Message *propeller_message, hermes::Message *rudder_message) override;
 
    protected:
     std::unique_ptr<Propeller> m_propeller;

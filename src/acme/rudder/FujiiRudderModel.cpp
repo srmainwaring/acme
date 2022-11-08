@@ -6,6 +6,9 @@
 
 namespace acme {
 
+  FujiiRudderModel::~FujiiRudderModel() {
+  }
+
   FujiiRudderModel::FujiiRudderModel(const acme::RudderParams params) : RudderBaseModel(params), m_f_alpha(0.) {
 
   }

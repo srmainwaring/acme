@@ -6,6 +6,9 @@
 
 namespace acme {
 
+  BrixRudderModel::~BrixRudderModel() {
+  }
+
   BrixRudderModel::BrixRudderModel(const RudderParams &params,
                     const std::string &rudder_perf_data_json_string) :
       RudderBaseModel(params) {

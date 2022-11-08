@@ -5,6 +5,7 @@
 #include <nlohmann/json.hpp>
 #include "acme/acme.h"
 #include "MathUtils/VectorGeneration.h"
+#include <fstream>
 
 using namespace acme;
 using json = nlohmann::json;

@@ -8,6 +8,8 @@
 using json = nlohmann::json;
 
 namespace acme {
+  CPP::~CPP() {
+  }
 
   CPP::CPP(const PropellerParams &params) :
       FPP4Q(params) {

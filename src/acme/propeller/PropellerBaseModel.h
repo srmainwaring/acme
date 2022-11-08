@@ -39,6 +39,8 @@ namespace acme {
   class PropellerBaseModel {
 
    public:
+    virtual ~PropellerBaseModel();
+
     PropellerBaseModel(const PropellerParams &params, PropellerModelType type);
 
     virtual void Initialize();

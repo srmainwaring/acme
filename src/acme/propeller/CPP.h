@@ -15,6 +15,8 @@ namespace acme {
   class CPP : public FPP4Q {
 
    public:
+    virtual ~CPP();
+   
     CPP(const PropellerParams &params);
 
    private:

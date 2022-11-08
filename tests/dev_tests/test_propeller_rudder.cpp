@@ -45,8 +45,8 @@ int main() {
 
   // TODO: Donnees a ajouter dans le json
   propeller_params.m_use_advance_velocity_correction_factor = false;
-  propeller_params.m_propeller_design_rpm;
-  propeller_params.m_vessel_design_speed_ms;
+  // propeller_params.m_propeller_design_rpm;
+  // propeller_params.m_vessel_design_speed_ms;
 
   propeller_params.m_thrust_coefficient_correction = 0.;
   propeller_params.m_torque_coefficient_correction = 0.;

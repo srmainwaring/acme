@@ -12,15 +12,17 @@ namespace acme {
   class FujiiRudderModel: public RudderBaseModel {
 
    public:
+    virtual ~FujiiRudderModel();
+
     FujiiRudderModel(const RudderParams params);
 
-    void Initialize() override;
+    virtual void Initialize() override;
 
     virtual void GetClCdCn(const double &attack_angle_rad,
                            const double &rudder_angle_rad,
                            double &cl,
                            double &cd,
-                           double &cn) const;
+                           double &cn) const override;
 
    private:
 

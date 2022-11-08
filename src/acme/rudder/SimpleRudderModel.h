@@ -20,6 +20,8 @@ namespace acme {
   class SimpleRudderModel: public RudderBaseModel {
 
    public:
+    virtual ~SimpleRudderModel();
+
     SimpleRudderModel(const RudderParams &params);
 
     void Initialize() override;
@@ -28,7 +30,7 @@ namespace acme {
                            const double &rudder_angle_rad,
                            double &cl,
                            double &cd,
-                           double &cn) const;
+                           double &cn) const override;
 
    private:
 

@@ -16,6 +16,8 @@ namespace acme {
   class FPP4Q : public PropellerBaseModel {
 
    public:
+    virtual ~FPP4Q();
+
     FPP4Q(const PropellerParams &params);
 
     void Compute(const double &water_density,

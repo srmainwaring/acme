@@ -16,9 +16,11 @@ namespace acme {
   class FlapRudderModel : public SimpleRudderModel {
 
    public:
+    virtual ~FlapRudderModel();
+
     FlapRudderModel(const RudderParams params);
 
-    void GetClCdCn(const double &attack_angle_rad,
+    virtual void GetClCdCn(const double &attack_angle_rad,
                    const double &rudder_angle_rad,
                    double &cl,
                    double &cd,
