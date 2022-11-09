@@ -6,8 +6,6 @@
 #include "PropellerRudderBase.h"
 
 namespace acme {
-  PropellerRudderBase::~PropellerRudderBase() {
-  }
 
   template<class Propeller, class Rudder>
   PropellerRudder<Propeller, Rudder>::PropellerRudder(const PropellerParams &thruster_params,
